@@ -10,6 +10,6 @@ export abstract class ValueObject {
       return false;
     }
 
-    return isEqual(this, vo);
+    return isEqual(vo, this);
   }
 }

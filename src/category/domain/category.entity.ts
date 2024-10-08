@@ -34,7 +34,7 @@ export class Category extends Entity {
     this.createdAt = props.createdAt ?? new Date();
   }
 
-  getEntityId(): ValueObject {
+  get entityID(): ValueObject {
     return this.categoryID;
   }
 
