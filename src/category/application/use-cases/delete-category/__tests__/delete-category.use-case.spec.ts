@@ -2,7 +2,7 @@ import { NotFoundError } from "../../../../../shared/domain/errors/not-found.err
 import { InvalidUUIDError, Uuid } from "../../../../../shared/domain/value-objects/uuid.vo";
 import { Category } from "../../../../domain/category.entity";
 import { CategoryInMemoryRepository } from "../../../../infra/db/in-memory/category-in-memory.repository";
-import { DeleteCategoryUseCase } from "../../delete-category.use-case";
+import { DeleteCategoryUseCase } from "../delete-category.use-case";
 
 describe('DeleteCategoryUseCase Unit Test', () => {
   let useCase: DeleteCategoryUseCase;

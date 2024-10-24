@@ -1,23 +1,39 @@
-import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
-import { Uuid } from "../../../../../shared/domain/value-objects/uuid.vo";
-import { setupSequelize } from "../../../../../shared/infra/testing/sequelize-helper";
-import { Category } from "../../../../domain/category.entity";
-import { CategorySequelizeRepository } from "../../../../infra/db/sequelize/category-sequelize.repository";
-import { CategoryModel } from "../../../../infra/db/sequelize/category.model";
-import { UpdateCategoryUseCase } from "../../update-category.use-case";
+import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
+import {
+  InvalidUUIDError,
+  Uuid,
+} from '../../../../../shared/domain/value-objects/uuid.vo';
+import { Category } from '../../../../domain/category.entity';
+import { CategoryInMemoryRepository } from '../../../../infra/db/in-memory/category-in-memory.repository';
+import { UpdateCategoryUseCase } from '../update-category.use-case';
 
-describe('UpdateCategoryUseCase Integration Test', () => {
+describe('UpdateCategoryUseCase Unit Test', () => {
   let useCase: UpdateCategoryUseCase;
-  let repository: CategorySequelizeRepository;
-
-  setupSequelize({ models: [CategoryModel] });
+  let repository: CategoryInMemoryRepository;
 
   beforeEach(() => {
-    repository = new CategorySequelizeRepository(CategoryModel);
+    repository = new CategoryInMemoryRepository();
     useCase = new UpdateCategoryUseCase(repository);
   });
 
-  it('should trhow an error if category does not exist', async () => {
+  it('should throw and error when category is invalid', async () => {
+    const category = new Category({ name: 'Movie' });
+
+    repository.items = [category];
+
+    await expect(() =>
+      useCase.execute({
+        categoryID: category.categoryID.id,
+        name: 'a'.repeat(256),
+      })
+    ).rejects.toThrow('Entity Validation Error');
+  });
+
+  it('should throw an error if category does not exist', async () => {
+    await expect(() =>
+      useCase.execute({ categoryID: 'fake-id', name: 'fake' })
+    ).rejects.toThrow(new InvalidUUIDError());
+
     const uuid = new Uuid();
 
     await expect(() =>
@@ -25,21 +41,25 @@ describe('UpdateCategoryUseCase Integration Test', () => {
     ).rejects.toThrow(new NotFoundError(uuid.id, Category));
   });
 
-  it('should create a category', async () => {
-    const category = Category.fake().aCategory().build();
+  it('should update a category', async () => {
+    const spyUpdate = jest.spyOn(repository, 'update');
 
-    repository.insert(category);
+    const category = Category.create({ name: 'Movie' });
+
+    repository.items = [category];
 
     let output = await useCase.execute({
       categoryID: category.categoryID.id,
       name: 'test',
     });
 
+    expect(spyUpdate).toHaveBeenCalledTimes(1);
+
     expect(output).toStrictEqual({
       categoryID: category.categoryID.id,
       name: 'test',
-      description: category.description,
-      isActive: category.isActive,
+      description: null,
+      isActive: true,
       createdAt: category.createdAt,
     });
 
@@ -148,31 +168,19 @@ describe('UpdateCategoryUseCase Integration Test', () => {
     for (const data of arrange) {
       output = await useCase.execute({
         categoryID: data.input.categoryID,
-        ...(data.input.name && { name: data.input.name }),
+        ...('name' in data.input && { name: data.input.name }),
         ...('description' in data.input && {
           description: data.input.description,
         }),
         ...('isActive' in data.input && { isActive: data.input.isActive }),
       });
 
-      const categoryUpdateded = await repository.findByID(
-        new Uuid(data.input.categoryID)
-      );
-
       expect(output).toStrictEqual({
         categoryID: category.categoryID.id,
         name: data.expected.name,
         description: data.expected.description,
         isActive: data.expected.isActive,
-        createdAt: categoryUpdateded!.createdAt,
-      });
-
-      expect(categoryUpdateded!.toJSON()).toStrictEqual({
-        categoryID: category.categoryID.id,
-        name: data.expected.name,
-        description: data.expected.description,
-        isActive: data.expected.isActive,
-        createdAt: categoryUpdateded!.createdAt,
+        createdAt: data.expected.createdAt,
       });
     }
   });

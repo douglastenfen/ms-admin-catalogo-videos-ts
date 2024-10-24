@@ -1,23 +1,23 @@
 import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
-import { InvalidUUIDError, Uuid } from "../../../../../shared/domain/value-objects/uuid.vo";
+import { Uuid } from "../../../../../shared/domain/value-objects/uuid.vo";
+import { setupSequelize } from "../../../../../shared/infra/testing/sequelize-helper";
 import { Category } from "../../../../domain/category.entity";
-import { CategoryInMemoryRepository } from "../../../../infra/db/in-memory/category-in-memory.repository";
-import { GetCategoryUseCase } from "../../get-category.use-case";
+import { CategorySequelizeRepository } from "../../../../infra/db/sequelize/category-sequelize.repository";
+import { CategoryModel } from "../../../../infra/db/sequelize/category.model";
+import { GetCategoryUseCase } from "../../get-category/get-category.use-case";
 
-describe('GetCategoryUseCase Unit Test', () => {
+describe('GetCategoryUseCase Integration Test', () => {
   let useCase: GetCategoryUseCase;
-  let repository: CategoryInMemoryRepository;
+  let repository: CategorySequelizeRepository;
+
+  setupSequelize({ models: [CategoryModel] });
 
   beforeEach(() => {
-    repository = new CategoryInMemoryRepository();
+    repository = new CategorySequelizeRepository(CategoryModel);
     useCase = new GetCategoryUseCase(repository);
   });
 
   it('should throw an error if category does not exist', async () => {
-    await expect(() =>
-      useCase.execute({ categoryID: 'fake-id' })
-    ).rejects.toThrow(new InvalidUUIDError());
-
     const uuid = new Uuid();
 
     await expect(() =>
@@ -26,17 +26,13 @@ describe('GetCategoryUseCase Unit Test', () => {
   });
 
   it('should return a category', async () => {
-    const category = Category.create({ name: 'Movie' });
+    const category = Category.fake().aCategory().build();
 
-    repository.items = [category];
-
-    const spyFindByID = jest.spyOn(repository, 'findByID');
+    repository.insert(category);
 
     const result = await useCase.execute({
       categoryID: category.categoryID.id,
     });
-
-    expect(spyFindByID).toHaveBeenCalledTimes(1);
 
     expect(result).toStrictEqual({
       categoryID: category.categoryID.id,
