@@ -80,7 +80,7 @@ describe('InMemoryRepository Unit Tests', () => {
     const entity = new StubEntity({ name: 'Test' });
 
     await expect(repo.update(entity)).rejects.toThrow(
-      new NotFoundError(entity.entityID, StubEntity)
+      new NotFoundError(entity.entityID, StubEntity),
     );
   });
 
@@ -103,13 +103,13 @@ describe('InMemoryRepository Unit Tests', () => {
     const entityID = new Uuid();
 
     await expect(repo.delete(entityID)).rejects.toThrow(
-      new NotFoundError(entityID.id, StubEntity)
+      new NotFoundError(entityID.id, StubEntity),
     );
 
     await expect(
-      repo.delete(new Uuid('123e4567-e89b-12d3-a456-426614174000'))
+      repo.delete(new Uuid('123e4567-e89b-12d3-a456-426614174000')),
     ).rejects.toThrow(
-      new NotFoundError('123e4567-e89b-12d3-a456-426614174000', StubEntity)
+      new NotFoundError('123e4567-e89b-12d3-a456-426614174000', StubEntity),
     );
   });
 

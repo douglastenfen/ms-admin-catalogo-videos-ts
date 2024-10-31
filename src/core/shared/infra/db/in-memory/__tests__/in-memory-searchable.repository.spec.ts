@@ -36,7 +36,7 @@ class StubInMemorySearchableRepository extends InMemorySearchableRepository<
 
   protected async applyFilter(
     items: StubEntity[],
-    filter: string
+    filter: string,
   ): Promise<StubEntity[]> {
     if (!filter) {
       return items;
@@ -163,7 +163,7 @@ describe('InMemorySearchableRepository Unit Tests', () => {
           total: 16,
           currentPage: 1,
           perPage: 15,
-        })
+        }),
       );
     });
 
@@ -178,7 +178,7 @@ describe('InMemorySearchableRepository Unit Tests', () => {
       repo.items = items;
 
       let result = await repo.search(
-        new SearchParams({ page: 1, perPage: 2, filter: 'TEST' })
+        new SearchParams({ page: 1, perPage: 2, filter: 'TEST' }),
       );
 
       expect(result).toStrictEqual(
@@ -187,11 +187,11 @@ describe('InMemorySearchableRepository Unit Tests', () => {
           total: 3,
           currentPage: 1,
           perPage: 2,
-        })
+        }),
       );
 
       result = await repo.search(
-        new SearchParams({ page: 2, perPage: 2, filter: 'TEST' })
+        new SearchParams({ page: 2, perPage: 2, filter: 'TEST' }),
       );
 
       expect(result).toStrictEqual(
@@ -200,7 +200,7 @@ describe('InMemorySearchableRepository Unit Tests', () => {
           total: 3,
           currentPage: 2,
           perPage: 2,
-        })
+        }),
       );
     });
 
@@ -278,7 +278,7 @@ describe('InMemorySearchableRepository Unit Tests', () => {
         async ({ searchParams, searchResult }) => {
           const result = await repo.search(searchParams);
           expect(result).toStrictEqual(searchResult);
-        }
+        },
       );
     });
 

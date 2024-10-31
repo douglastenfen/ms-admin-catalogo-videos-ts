@@ -140,7 +140,7 @@ describe('CategoryEntity Unit Tests', () => {
         const category = new Category(props as any);
 
         expect(category.categoryID).toBeInstanceOf(Uuid);
-      }
+      },
     );
   });
 

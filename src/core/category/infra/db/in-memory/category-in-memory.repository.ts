@@ -15,7 +15,7 @@ export class CategoryInMemoryRepository
 
   protected async applyFilter(
     items: Category[],
-    filter: CategoryFilter
+    filter: CategoryFilter,
   ): Promise<Category[]> {
     if (!filter) {
       return items;
@@ -33,7 +33,7 @@ export class CategoryInMemoryRepository
   protected applySort(
     items: Category[],
     sort: string | null,
-    sortDir: SortDirection | null
+    sortDir: SortDirection | null,
   ) {
     return sort
       ? super.applySort(items, sort, sortDir)

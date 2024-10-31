@@ -14,7 +14,7 @@ describe('CreateCategoryUseCase Unit Test', () => {
     const input = { name: 'a'.repeat(256) };
 
     await expect(useCase.execute(input)).rejects.toThrow(
-      'Entity Validation Error'
+      'Entity Validation Error',
     );
   });
 

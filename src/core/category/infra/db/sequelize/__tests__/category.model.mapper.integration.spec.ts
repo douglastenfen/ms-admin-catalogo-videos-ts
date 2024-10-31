@@ -18,7 +18,7 @@ describe('CategoryModelMapper Integration Test', () => {
     try {
       CategoryModelMapper.toEntity(model);
       fail(
-        'The category is valid, but it need to throw an EntityValidationError'
+        'The category is valid, but it need to throw an EntityValidationError',
       );
     } catch (e) {
       expect(e).toBeInstanceOf(EntityValidationError);
@@ -48,7 +48,7 @@ describe('CategoryModelMapper Integration Test', () => {
         description: 'Description of category 1',
         isActive: true,
         createdAt,
-      }).toJSON()
+      }).toJSON(),
     );
   });
 

@@ -24,7 +24,7 @@ describe('SearchParams Unit Tests', () => {
 
     arrange.forEach((item) => {
       expect(new SearchParams({ page: item.page as any }).page).toBe(
-        item.expected
+        item.expected,
       );
     });
   });
@@ -53,7 +53,7 @@ describe('SearchParams Unit Tests', () => {
 
     arrange.forEach((item) => {
       expect(new SearchParams({ perPage: item.perPage as any }).perPage).toBe(
-        item.expected
+        item.expected,
       );
     });
   });
@@ -79,7 +79,7 @@ describe('SearchParams Unit Tests', () => {
 
     arrange.forEach((item) => {
       expect(new SearchParams({ sort: item.sort as any }).sort).toBe(
-        item.expected
+        item.expected,
       );
     });
   });
@@ -112,7 +112,7 @@ describe('SearchParams Unit Tests', () => {
     arrange.forEach((item) => {
       expect(
         new SearchParams({ sort: 'field', sortDir: item.sortDir as any })
-          .sortDir
+          .sortDir,
       ).toBe(item.expected);
     });
   });
@@ -138,7 +138,7 @@ describe('SearchParams Unit Tests', () => {
 
     arrange.forEach((item) => {
       expect(new SearchParams({ filter: item.filter as any }).filter).toEqual(
-        item.expected
+        item.expected,
       );
     });
   });

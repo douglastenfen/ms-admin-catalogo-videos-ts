@@ -13,7 +13,7 @@ import { ValueObject } from '../../../domain/value-object';
 
 export abstract class InMemoryRepository<
   E extends Entity,
-  EntityID extends ValueObject
+  EntityID extends ValueObject,
 > implements IRepository<E, EntityID>
 {
   items: E[] = [];
@@ -28,7 +28,7 @@ export abstract class InMemoryRepository<
 
   async update(entity: E): Promise<void> {
     const indexFound = this.items.findIndex((item) =>
-      item.entityID.equals(entity.entityID)
+      item.entityID.equals(entity.entityID),
     );
 
     if (indexFound === -1) {
@@ -40,7 +40,7 @@ export abstract class InMemoryRepository<
 
   async delete(entityID: EntityID): Promise<void> {
     const indexFound = this.items.findIndex((item) =>
-      item.entityID.equals(entityID)
+      item.entityID.equals(entityID),
     );
 
     if (indexFound === -1) {
@@ -66,7 +66,7 @@ export abstract class InMemoryRepository<
 export abstract class InMemorySearchableRepository<
     E extends Entity,
     EntityID extends ValueObject,
-    Filter = string
+    Filter = string,
   >
   extends InMemoryRepository<E, EntityID>
   implements ISearchableRepository<E, EntityID, Filter>
@@ -80,7 +80,7 @@ export abstract class InMemorySearchableRepository<
     const paginatedItems = this.applyPaginate(
       sortedItems,
       props.page,
-      props.perPage
+      props.perPage,
     );
 
     return new SearchResult({
@@ -93,14 +93,14 @@ export abstract class InMemorySearchableRepository<
 
   protected abstract applyFilter(
     items: E[],
-    filter: Filter | null
+    filter: Filter | null,
   ): Promise<E[]>;
 
   protected applySort(
     items: E[],
     sort: string | null,
     sortDir: SortDirection | null,
-    customGetter?: (sort: string, item: E) => any
+    customGetter?: (sort: string, item: E) => any,
   ) {
     if (!sort || !this.sortableFields.includes(sort)) {
       return items;
@@ -127,7 +127,7 @@ export abstract class InMemorySearchableRepository<
   protected applyPaginate(
     items: E[],
     page: SearchParams['page'],
-    perPage: SearchParams['perPage']
+    perPage: SearchParams['perPage'],
   ) {
     const start = (page - 1) * perPage;
     const limit = start + perPage;

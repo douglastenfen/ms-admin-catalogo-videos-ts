@@ -1,8 +1,11 @@
-import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
-import { InvalidUUIDError, Uuid } from "../../../../../shared/domain/value-objects/uuid.vo";
-import { Category } from "../../../../domain/category.entity";
-import { CategoryInMemoryRepository } from "../../../../infra/db/in-memory/category-in-memory.repository";
-import { GetCategoryUseCase } from "../get-category.use-case";
+import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
+import {
+  InvalidUUIDError,
+  Uuid,
+} from '../../../../../shared/domain/value-objects/uuid.vo';
+import { Category } from '../../../../domain/category.entity';
+import { CategoryInMemoryRepository } from '../../../../infra/db/in-memory/category-in-memory.repository';
+import { GetCategoryUseCase } from '../get-category.use-case';
 
 describe('GetCategoryUseCase Unit Test', () => {
   let useCase: GetCategoryUseCase;
@@ -15,13 +18,13 @@ describe('GetCategoryUseCase Unit Test', () => {
 
   it('should throw an error if category does not exist', async () => {
     await expect(() =>
-      useCase.execute({ categoryID: 'fake-id' })
+      useCase.execute({ categoryID: 'fake-id' }),
     ).rejects.toThrow(new InvalidUUIDError());
 
     const uuid = new Uuid();
 
     await expect(() =>
-      useCase.execute({ categoryID: uuid.id })
+      useCase.execute({ categoryID: uuid.id }),
     ).rejects.toThrow(new NotFoundError(uuid.id, Category));
   });
 

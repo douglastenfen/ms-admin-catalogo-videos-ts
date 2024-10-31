@@ -25,19 +25,19 @@ describe('UpdateCategoryUseCase Unit Test', () => {
       useCase.execute({
         categoryID: category.categoryID.id,
         name: 'a'.repeat(256),
-      })
+      }),
     ).rejects.toThrow('Entity Validation Error');
   });
 
   it('should throw an error if category does not exist', async () => {
     await expect(() =>
-      useCase.execute({ categoryID: 'fake-id', name: 'fake' })
+      useCase.execute({ categoryID: 'fake-id', name: 'fake' }),
     ).rejects.toThrow(new InvalidUUIDError());
 
     const uuid = new Uuid();
 
     await expect(() =>
-      useCase.execute({ categoryID: uuid.id, name: 'fake' })
+      useCase.execute({ categoryID: uuid.id, name: 'fake' }),
     ).rejects.toThrow(new NotFoundError(uuid.id, Category));
   });
 

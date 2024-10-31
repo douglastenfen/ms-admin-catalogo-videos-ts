@@ -117,7 +117,7 @@ export class CategoryFakeBuilder<TBuild = any> {
 
     if (!this[privateProp] && optional.includes(prop)) {
       throw new Error(
-        `Property ${prop} not have a factory, use 'with' methods`
+        `Property ${prop} not have a factory, use 'with' methods`,
       );
     }
 

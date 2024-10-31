@@ -10,7 +10,10 @@ import {
   CategorySearchResult,
   ICategoryRepository,
 } from '../../../domain/category.repository';
-import { CategoryOutput, CategoryOutputMapper } from '../common/category-output';
+import {
+  CategoryOutput,
+  CategoryOutputMapper,
+} from '../common/category-output';
 
 export class ListCategoriesUseCase
   implements IUseCase<ListCategoriesInput, ListCategoriesOutput>

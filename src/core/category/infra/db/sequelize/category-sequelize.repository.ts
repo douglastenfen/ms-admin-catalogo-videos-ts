@@ -1,4 +1,5 @@
-import { Op } from 'sequelize';
+import { SortDirection } from '@core/shared/domain/repository/search-params';
+import { literal, Op } from 'sequelize';
 import { NotFoundError } from '../../../../shared/domain/errors/not-found.error';
 import { Uuid } from '../../../../shared/domain/value-objects/uuid.vo';
 import { Category } from '../../../domain/category.entity';
@@ -13,6 +14,12 @@ import { CategoryModelMapper } from './category.model.mapper';
 export class CategorySequelizeRepository implements ICategoryRepository {
   sortableFields: string[] = ['name', 'createdAt'];
 
+  orderBy = {
+    mysql: {
+      name: (sortDir: SortDirection) => literal(`binary name ${sortDir}`),
+    },
+  };
+
   constructor(private categoryModel: typeof CategoryModel) {}
 
   async insert(entity: Category): Promise<void> {
@@ -23,7 +30,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
 
   async bulkInsert(entities: Category[]): Promise<void> {
     const models = entities.map((entity) =>
-      CategoryModelMapper.toModel(entity)
+      CategoryModelMapper.toModel(entity),
     );
 
     await this.categoryModel.bulkCreate(models.map((model) => model.toJSON()));
@@ -44,13 +51,14 @@ export class CategorySequelizeRepository implements ICategoryRepository {
 
   async delete(entityID: Uuid): Promise<void> {
     const { id } = entityID;
-    const model = await this._getById(id);
 
-    if (!model) {
+    const affectedRows = await this.categoryModel.destroy({
+      where: { categoryID: id },
+    });
+
+    if (affectedRows !== 1) {
       throw new NotFoundError(id, this.getEntity());
     }
-
-    await model.destroy();
   }
 
   async findByID(entityID: Uuid): Promise<Category | null> {
@@ -83,7 +91,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
       }),
 
       ...(props.sort && this.sortableFields.includes(props.sort)
-        ? { order: [[props.sort, props.sortDir]] }
+        ? { order: this.formatSort(props.sort, props.sortDir) }
         : { order: [['createdAt', 'desc']] }),
 
       offset,
@@ -96,6 +104,15 @@ export class CategorySequelizeRepository implements ICategoryRepository {
       perPage: props.perPage,
       total: count,
     });
+  }
+
+  private formatSort(sort: string, sortDir: SortDirection) {
+    const dialect = this.categoryModel.sequelize.getDialect() as 'mysql';
+
+    if (this.orderBy[dialect] && this.orderBy[dialect][sort]) {
+      return this.orderBy[dialect][sort](sortDir);
+    }
+    return [[sort, sortDir]];
   }
 
   getEntity(): new (...args: any[]) => Category {
