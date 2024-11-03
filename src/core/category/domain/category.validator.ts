@@ -1,6 +1,6 @@
 import { MaxLength } from 'class-validator';
 import { ClassValidatorFields } from '../../shared/domain/validators/class-validator-fields';
-import { Category } from './category.entity';
+import { Category } from './category.aggregate';
 import { Notification } from '../../shared/domain/validators/notification';
 
 export class CategoryRules {

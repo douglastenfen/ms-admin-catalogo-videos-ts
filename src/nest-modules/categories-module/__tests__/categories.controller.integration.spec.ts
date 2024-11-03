@@ -4,7 +4,7 @@ import { DeleteCategoryUseCase } from '@core/category/application/use-cases/dele
 import { GetCategoryUseCase } from '@core/category/application/use-cases/get-category/get-category.use-case';
 import { ListCategoriesUseCase } from '@core/category/application/use-cases/list-categories/list-categories.use-case';
 import { UpdateCategoryUseCase } from '@core/category/application/use-cases/update-category/update-category.use-case';
-import { Category } from '@core/category/domain/category.entity';
+import { Category } from '@core/category/domain/category.aggregate';
 import { ICategoryRepository } from '@core/category/domain/category.repository';
 import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
 import { Test, TestingModule } from '@nestjs/testing';

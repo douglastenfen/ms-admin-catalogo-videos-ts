@@ -1,5 +1,5 @@
 import { CategoryOutputMapper } from '@core/category/application/use-cases/common/category-output';
-import { Category } from '@core/category/domain/category.entity';
+import { Category } from '@core/category/domain/category.aggregate';
 import { ICategoryRepository } from '@core/category/domain/category.repository';
 import { instanceToPlain } from 'class-transformer';
 import { CategoriesController } from 'src/nest-modules/categories-module/categories.controller';

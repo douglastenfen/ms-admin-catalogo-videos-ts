@@ -1,9 +1,8 @@
 import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
 import {
-  InvalidUUIDError,
-  Uuid,
+  InvalidUUIDError
 } from '../../../../../shared/domain/value-objects/uuid.vo';
-import { Category } from '../../../../domain/category.entity';
+import { Category, CategoryId } from '../../../../domain/category.aggregate';
 import { CategoryInMemoryRepository } from '../../../../infra/db/in-memory/category-in-memory.repository';
 import { GetCategoryUseCase } from '../get-category.use-case';
 
@@ -21,11 +20,11 @@ describe('GetCategoryUseCase Unit Test', () => {
       useCase.execute({ categoryID: 'fake-id' }),
     ).rejects.toThrow(new InvalidUUIDError());
 
-    const uuid = new Uuid();
+    const categoryId = new CategoryId();
 
     await expect(() =>
-      useCase.execute({ categoryID: uuid.id }),
-    ).rejects.toThrow(new NotFoundError(uuid.id, Category));
+      useCase.execute({ categoryID: categoryId.id }),
+    ).rejects.toThrow(new NotFoundError(categoryId.id, Category));
   });
 
   it('should return a category', async () => {

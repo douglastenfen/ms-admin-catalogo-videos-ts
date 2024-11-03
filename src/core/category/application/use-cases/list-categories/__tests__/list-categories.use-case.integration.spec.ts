@@ -1,5 +1,5 @@
 import { setupSequelize } from '../../../../../shared/infra/testing/sequelize-helper';
-import { Category } from '../../../../domain/category.entity';
+import { Category } from '../../../../domain/category.aggregate';
 import { CategorySequelizeRepository } from '../../../../infra/db/sequelize/category-sequelize.repository';
 import { CategoryModel } from '../../../../infra/db/sequelize/category.model';
 import { CategoryOutputMapper } from '../../common/category-output';

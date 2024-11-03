@@ -1,7 +1,6 @@
 import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
-import { Uuid } from '../../../../../shared/domain/value-objects/uuid.vo';
 import { setupSequelize } from '../../../../../shared/infra/testing/sequelize-helper';
-import { Category } from '../../../../domain/category.entity';
+import { Category, CategoryId } from '../../../../domain/category.aggregate';
 import { CategorySequelizeRepository } from '../../../../infra/db/sequelize/category-sequelize.repository';
 import { CategoryModel } from '../../../../infra/db/sequelize/category.model';
 import { GetCategoryUseCase } from '../../get-category/get-category.use-case';
@@ -18,11 +17,11 @@ describe('GetCategoryUseCase Integration Test', () => {
   });
 
   it('should throw an error if category does not exist', async () => {
-    const uuid = new Uuid();
+    const categoryId = new CategoryId();
 
     await expect(() =>
-      useCase.execute({ categoryID: uuid.id }),
-    ).rejects.toThrow(new NotFoundError(uuid.id, Category));
+      useCase.execute({ categoryID: categoryId.id }),
+    ).rejects.toThrow(new NotFoundError(categoryId.id, Category));
   });
 
   it('should return a category', async () => {

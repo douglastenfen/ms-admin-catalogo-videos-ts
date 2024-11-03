@@ -1,7 +1,6 @@
 import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
-import { Uuid } from '../../../../../shared/domain/value-objects/uuid.vo';
 import { setupSequelize } from '../../../../../shared/infra/testing/sequelize-helper';
-import { Category } from '../../../../domain/category.entity';
+import { Category, CategoryId } from '../../../../domain/category.aggregate';
 import {
   CategorySearchParams,
   CategorySearchResult,
@@ -28,7 +27,7 @@ describe('CategorySequelizeRepository Integration Test', () => {
   });
 
   it('should find a category by id', async () => {
-    let categoryFound = await repository.findByID(new Uuid());
+    let categoryFound = await repository.findByID(new CategoryId());
     expect(categoryFound).toBeNull();
 
     const category = Category.fake().aCategory().build();
@@ -75,7 +74,7 @@ describe('CategorySequelizeRepository Integration Test', () => {
   });
 
   it('should throw an error on delete when a category does not exist', async () => {
-    const categoryID = new Uuid();
+    const categoryID = new CategoryId();
 
     await expect(repository.delete(categoryID)).rejects.toThrow(
       new NotFoundError(categoryID.id, Category),

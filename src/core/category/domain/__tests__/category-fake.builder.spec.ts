@@ -1,6 +1,6 @@
 import { Chance } from 'chance';
-import { Uuid } from '../../../shared/domain/value-objects/uuid.vo';
 import { CategoryFakeBuilder } from '../category-fake.builder';
+import { CategoryId } from '../category.aggregate';
 
 describe('CategoryFakeBuilder Unit Tests', () => {
   describe('categoryID prop', () => {
@@ -16,7 +16,7 @@ describe('CategoryFakeBuilder Unit Tests', () => {
     });
 
     test('withCategoryID', () => {
-      const categoryID = new Uuid();
+      const categoryID = new CategoryId();
       const $this = faker.withCategoryID(categoryID);
 
       expect($this).toBeInstanceOf(CategoryFakeBuilder);
@@ -31,14 +31,14 @@ describe('CategoryFakeBuilder Unit Tests', () => {
     });
 
     test('withCategoryID using factory', () => {
-      let mockFactory = jest.fn(() => new Uuid());
+      let mockFactory = jest.fn(() => new CategoryId());
 
       faker.withCategoryID(mockFactory);
       faker.build();
 
       expect(mockFactory).toHaveBeenCalledTimes(1);
 
-      const categoryID = new Uuid();
+      const categoryID = new CategoryId();
 
       mockFactory = jest.fn(() => categoryID);
 
@@ -240,14 +240,14 @@ describe('CategoryFakeBuilder Unit Tests', () => {
     const faker = CategoryFakeBuilder.aCategory();
     let category = faker.build();
 
-    expect(category.categoryID).toBeInstanceOf(Uuid);
+    expect(category.categoryID).toBeInstanceOf(CategoryId);
     expect(typeof category.name).toBe('string');
     expect(typeof category.description).toBe('string');
     expect(category.isActive).toBe(true);
     expect(category.createdAt).toBeInstanceOf(Date);
 
     const createdAt = new Date();
-    const categoryID = new Uuid();
+    const categoryID = new CategoryId();
 
     category = faker
       .withCategoryID(categoryID)
@@ -269,7 +269,7 @@ describe('CategoryFakeBuilder Unit Tests', () => {
     let categories = faker.build();
 
     categories.forEach((category) => {
-      expect(category.categoryID).toBeInstanceOf(Uuid);
+      expect(category.categoryID).toBeInstanceOf(CategoryId);
       expect(typeof category.name).toBe('string');
       expect(typeof category.description).toBe('string');
       expect(category.isActive).toBe(true);
@@ -277,7 +277,7 @@ describe('CategoryFakeBuilder Unit Tests', () => {
     });
 
     const createdAt = new Date();
-    const categoryID = new Uuid();
+    const categoryID = new CategoryId();
 
     categories = faker
       .withCategoryID(categoryID)
