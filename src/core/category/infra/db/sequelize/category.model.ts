@@ -17,7 +17,7 @@ export type CategoryModelProps = {
 @Table({ tableName: 'categories', timestamps: false })
 export class CategoryModel extends Model<CategoryModelProps> {
   @PrimaryKey
-  @Column({ type: DataType.UUID })
+  @Column({ type: DataType.UUID, field: 'category_id' })
   declare categoryID: string;
 
   @Column({ allowNull: false, type: DataType.STRING(255) })
@@ -26,9 +26,9 @@ export class CategoryModel extends Model<CategoryModelProps> {
   @Column({ allowNull: true, type: DataType.TEXT })
   declare description: string | null;
 
-  @Column({ allowNull: false, type: DataType.BOOLEAN })
+  @Column({ allowNull: false, type: DataType.BOOLEAN, field: 'is_active' })
   declare isActive: boolean;
 
-  @Column({ allowNull: false, type: DataType.DATE(3) })
+  @Column({ allowNull: false, type: DataType.DATE(3), field: 'created_at' })
   declare createdAt: Date;
 }

@@ -1,4 +1,4 @@
-FROM node:20.5.1-slim
+FROM node:lts-slim
 
 RUN npm install -g @nestjs/cli@10.4.5
 
