@@ -20,6 +20,7 @@ describe('CastMemberModelMapper Integration Test', () => {
   it('should trhow error when cast member is invalid', () => {
     expect.assertions(2);
 
+    // @ts-expect-error - invalid cast member
     const model = CastMemberModel.build({
       castMemberId: '123e4567-e89b-12d3-a456-426614174000',
     });

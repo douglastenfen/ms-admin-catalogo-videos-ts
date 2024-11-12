@@ -32,7 +32,7 @@ describe('CastMemberRepository Integration Test', () => {
 
     const castMemberFound = await repository.findByID(castMember.castMemberId);
 
-    expect(castMemberFound.toJSON()).toStrictEqual(castMember.toJSON());
+    expect(castMemberFound!.toJSON()).toStrictEqual(castMember.toJSON());
   });
 
   it('should find a cast member by id', async () => {
@@ -45,7 +45,7 @@ describe('CastMemberRepository Integration Test', () => {
 
     castMemberFound = await repository.findByID(castMember.castMemberId);
 
-    expect(castMemberFound.toJSON()).toStrictEqual(castMember.toJSON());
+    expect(castMemberFound!.toJSON()).toStrictEqual(castMember.toJSON());
   });
 
   it('should return all cast members', async () => {
@@ -82,7 +82,7 @@ describe('CastMemberRepository Integration Test', () => {
 
     const castMemberFound = await repository.findByID(castMember.castMemberId);
 
-    expect(castMemberFound.toJSON()).toStrictEqual(castMember.toJSON());
+    expect(castMemberFound!.toJSON()).toStrictEqual(castMember.toJSON());
   });
 
   it('should throw an error on delete when cast member does not exist', async () => {

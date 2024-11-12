@@ -91,7 +91,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
       }),
 
       ...(props.sort && this.sortableFields.includes(props.sort)
-        ? { order: this.formatSort(props.sort, props.sortDir) }
+        ? { order: this.formatSort(props.sort, props.sortDir!) }
         : { order: [['createdAt', 'desc']] }),
 
       offset,
@@ -107,7 +107,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
   }
 
   private formatSort(sort: string, sortDir: SortDirection) {
-    const dialect = this.categoryModel.sequelize.getDialect() as 'mysql';
+    const dialect = this.categoryModel.sequelize!.getDialect() as 'mysql';
 
     if (this.orderBy[dialect] && this.orderBy[dialect][sort]) {
       return this.orderBy[dialect][sort](sortDir);

@@ -36,7 +36,7 @@ class StubInMemorySearchableRepository extends InMemorySearchableRepository<
 
   protected async applyFilter(
     items: StubEntity[],
-    filter: string,
+    filter: string | null,
   ): Promise<StubEntity[]> {
     if (!filter) {
       return items;

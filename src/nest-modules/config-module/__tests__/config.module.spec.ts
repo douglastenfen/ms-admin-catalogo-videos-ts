@@ -4,6 +4,7 @@ import { join } from 'path';
 import { CONFIG_DB_SCHEMA, ConfigModule } from '../config.module';
 
 function expectValidate(schema: Joi.Schema, value: any) {
+  // @ts-expect-error if the value is invalid, it will throw an error
   return expect(schema.validate(value, { abortEarly: false }).error.message);
 }
 

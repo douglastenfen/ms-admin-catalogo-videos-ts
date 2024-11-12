@@ -20,8 +20,8 @@ describe('CastMemberRepository Unit Tests', () => {
       });
 
       expect(searchParams).toBeInstanceOf(CastMemberSearchParams);
-      expect(searchParams.filter.name).toBe('Test');
-      expect(searchParams.filter.type.type).toBe(CastMemberTypes.ACTOR);
+      expect(searchParams.filter!.name).toBe('Test');
+      expect(searchParams.filter!.type!.type).toBe(CastMemberTypes.ACTOR);
     });
 
     it('should throw an error when an invalid type is passed', () => {

@@ -44,7 +44,7 @@ describe('CreateCastMemberUseCase Integration Test', () => {
       castMemberId: entity!.castMemberId.id,
       name: 'test',
       type: CastMemberTypes.DIRECTOR,
-      createdAt: entity.createdAt,
+      createdAt: entity!.createdAt,
     });
   });
 });

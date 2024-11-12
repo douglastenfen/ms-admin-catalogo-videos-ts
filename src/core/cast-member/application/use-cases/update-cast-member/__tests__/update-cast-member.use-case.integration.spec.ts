@@ -106,8 +106,8 @@ describe('UpdateCastMemberUseCase Integration Test', () => {
         createdAt: i.expected.createdAt,
       });
 
-      expect(castMemberUpdated.toJSON()).toStrictEqual({
-        castMemberId: castMemberUpdated.castMemberId.id,
+      expect(castMemberUpdated!.toJSON()).toStrictEqual({
+        castMemberId: castMemberUpdated!.castMemberId.id,
         name: i.expected.name,
         type: i.expected.type,
         createdAt: i.expected.createdAt,

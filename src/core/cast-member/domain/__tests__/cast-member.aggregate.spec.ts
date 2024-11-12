@@ -43,9 +43,9 @@ describe('CastMember Unit Tests', () => {
 
     const arrange = [
       { name: 'Actor', type: actor },
-      { name: 'Actor', type: actor, castMemberId: null },
-      { name: 'Actor', type: actor, castMemberId: undefined },
-      { name: 'Actor', type: actor, castMemberId: new CastMemberId() },
+      { name: 'Actor', type: actor, id: null },
+      { name: 'Actor', type: actor, id: undefined },
+      { name: 'Actor', type: actor, id: new CastMemberId() },
     ];
 
     test.each(arrange)('when props are %p', (item) => {

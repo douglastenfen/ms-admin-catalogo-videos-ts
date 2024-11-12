@@ -1,26 +1,26 @@
+import { CastMemberOutputMapper } from '@core/cast-member/application/use-cases/common/cast-member-output';
+import { CreateCastMemberUseCase } from '@core/cast-member/application/use-cases/create-cast-member/create-cast-member.use-case';
+import { DeleteCastMemberUseCase } from '@core/cast-member/application/use-cases/delete-cast-member/delete-cast-member.use-case';
+import { GetCastMemberUseCase } from '@core/cast-member/application/use-cases/get-cast-member/get-cast-member.use-case';
+import { ListCastMembersUseCase } from '@core/cast-member/application/use-cases/list-cast-members/list-cast-members.use-case';
+import { UpdateCastMemberUseCase } from '@core/cast-member/application/use-cases/update-cast-member/update-cast-member.use-case';
+import {
+  CastMember,
+  CastMemberId,
+} from '@core/cast-member/domain/cast-member.aggregate';
 import { ICastMemberRepository } from '@core/cast-member/domain/cast-member.repository';
-import { CastMembersController } from '../cast-members.controller';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule } from 'src/nest-modules/config-module/config.module';
 import { DatabaseModule } from 'src/nest-modules/database-module/database.module';
+import { CastMembersController } from '../cast-members.controller';
 import { CastMembersModule } from '../cast-members.module';
+import { CastMemberCollectionPresenter } from '../cast-members.presenter';
 import { CAST_MEMBER_PROVIDERS } from '../cast-members.provider';
-import { CreateCastMemberUseCase } from '@core/cast-member/application/use-cases/create-cast-member/create-cast-member.use-case';
-import { UpdateCastMemberUseCase } from '@core/cast-member/application/use-cases/update-cast-member/update-cast-member.use-case';
-import { ListCastMembersUseCase } from '@core/cast-member/application/use-cases/list-cast-members/list-cast-members.use-case';
-import { GetCastMemberUseCase } from '@core/cast-member/application/use-cases/get-cast-member/get-cast-member.use-case';
-import { DeleteCastMemberUseCase } from '@core/cast-member/application/use-cases/delete-cast-member/delete-cast-member.use-case';
 import {
   CreateCastMemberFixture,
   ListCastMembersFixture,
   UpdateCastMemberFixture,
 } from '../testing/cast-member-fixture';
-import {
-  CastMember,
-  CastMemberId,
-} from '@core/cast-member/domain/cast-member.aggregate';
-import { CastMemberOutputMapper } from '@core/cast-member/application/use-cases/common/cast-member-output';
-import { CastMemberCollectionPresenter } from '../cast-members.presenter';
 
 describe('CastMembersController Integration Tests', () => {
   let controller: CastMembersController;
@@ -69,7 +69,7 @@ describe('CastMembersController Integration Tests', () => {
           new CastMemberId(presenter.castMemberId),
         );
 
-        expect(entity.toJSON()).toStrictEqual({
+        expect(entity!.toJSON()).toStrictEqual({
           castMemberId: presenter.castMemberId,
           createdAt: presenter.createdAt,
           ...expected,
@@ -77,7 +77,7 @@ describe('CastMembersController Integration Tests', () => {
 
         expect(presenter).toEqual(
           CastMembersController.serialize(
-            CastMemberOutputMapper.toOutput(entity),
+            CastMemberOutputMapper.toOutput(entity!),
           ),
         );
       },
@@ -105,7 +105,7 @@ describe('CastMembersController Integration Tests', () => {
           new CastMemberId(presenter.castMemberId),
         );
 
-        expect(entity.toJSON()).toStrictEqual({
+        expect(entity!.toJSON()).toStrictEqual({
           castMemberId: presenter.castMemberId,
           createdAt: presenter.createdAt,
           name: expected.name ?? castMember.name,
@@ -114,7 +114,7 @@ describe('CastMembersController Integration Tests', () => {
 
         expect(presenter).toEqual(
           CastMembersController.serialize(
-            CastMemberOutputMapper.toOutput(entity),
+            CastMemberOutputMapper.toOutput(entity!),
           ),
         );
       },

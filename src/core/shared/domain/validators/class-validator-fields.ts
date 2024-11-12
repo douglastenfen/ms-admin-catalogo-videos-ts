@@ -16,7 +16,7 @@ export abstract class ClassValidatorFields implements IValidatorFields {
           notification.addError(message, field);
         });
       }
-      return !errors.length;
     }
+    return !errors.length;
   }
 }

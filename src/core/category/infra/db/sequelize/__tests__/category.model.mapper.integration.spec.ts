@@ -10,6 +10,8 @@ describe('CategoryModelMapper Integration Test', () => {
 
   it('should trhow error when category is invalid', () => {
     expect.assertions(2);
+
+    // @ts-expect-error - invalid category
     const model = CategoryModel.build({
       categoryID: '123e4567-e89b-12d3-a456-426614174000',
       name: 'a'.repeat(256),

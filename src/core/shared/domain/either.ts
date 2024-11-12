@@ -2,7 +2,7 @@ type Flatten<Type> = Type extends Array<infer Item> ? Item : Type;
 
 type IteratorValue<Ok, Error> = Ok | Error;
 
-export class Either<Ok, ErrorType = Error>
+export class Either<Ok = unknown, ErrorType = Error>
   implements Iterable<IteratorValue<Ok, ErrorType>>
 {
   private _ok: Ok;
@@ -29,19 +29,25 @@ export class Either<Ok, ErrorType = Error>
     return this.error !== null;
   }
 
-  static of<Ok = any>(value: Ok): Either<Ok> {
+  static of<Ok, ErrorType = Error>(value: Ok): Either<Ok, ErrorType> {
     return Either.ok(value);
   }
 
-  static ok<T>(value: T): Either<T, null> {
+  static ok<T, ErrorType = Error>(value: T): Either<T, ErrorType> {
+    // @ts-expect-error - error can be null
     return new Either(value, null);
   }
 
-  static fail<T>(error: T): Either<null, T> {
+  static fail<ErrorType = Error, Ok = unknown>(
+    error: ErrorType,
+  ): Either<Ok, ErrorType> {
+    // @ts-expect-error - ok can be null
     return new Either(null, error);
   }
 
-  static safe<Ok, ErrorType = Error>(fn: () => Ok): Either<Ok, ErrorType> {
+  static safe<Ok = unknown, ErrorType = Error>(
+    fn: () => Ok,
+  ): Either<Ok, ErrorType> {
     try {
       return Either.ok(fn());
     } catch (e) {
@@ -64,13 +70,13 @@ export class Either<Ok, ErrorType = Error>
    * This method is used to create a new Either from the value of an Either.
    * The new Either can be a fail or a ok.
    */
-  chain<NewOk, NewError = any>(
+  chain<NewOk, NewError = Error>(
     fn: (value: Ok) => Either<NewOk, NewError>,
   ): Either<NewOk, ErrorType | NewError> {
     if (this.isOk()) {
       return fn(this.ok);
     }
-    return Either.fail<ErrorType>(this.error);
+    return Either.fail(this.error);
   }
 
   /**
@@ -121,10 +127,7 @@ class EitherIterator<Ok, Error>
     this._value = value;
   }
 
-  next(): IteratorResult<
-    IteratorValue<Ok, Error>,
-    IteratorValue<Ok, Error> | undefined
-  > {
+  next(): IteratorResult<IteratorValue<Ok, Error>> {
     if (this.index === 0) {
       this.index++;
       return {

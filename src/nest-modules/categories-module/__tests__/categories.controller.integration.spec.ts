@@ -68,13 +68,13 @@ describe('CategoriesController Integration Tests', () => {
           new Uuid(presenter.categoryID),
         );
 
-        expect(entity.toJSON()).toStrictEqual({
+        expect(entity!.toJSON()).toStrictEqual({
           categoryID: presenter.categoryID,
           createdAt: presenter.createdAt,
           ...expected,
         });
 
-        const output = CategoryOutputMapper.toOutput(entity);
+        const output = CategoryOutputMapper.toOutput(entity!);
 
         expect(presenter).toEqual(new CategoryPresenter(output));
       },
@@ -102,7 +102,7 @@ describe('CategoriesController Integration Tests', () => {
           new Uuid(presenter.categoryID),
         );
 
-        expect(entity.toJSON()).toStrictEqual({
+        expect(entity!.toJSON()).toStrictEqual({
           categoryID: presenter.categoryID,
           createdAt: presenter.createdAt,
           name: expected.name ?? category.name,
@@ -116,7 +116,7 @@ describe('CategoriesController Integration Tests', () => {
               : category.isActive,
         });
 
-        const output = CategoryOutputMapper.toOutput(entity);
+        const output = CategoryOutputMapper.toOutput(entity!);
         expect(presenter).toEqual(new CategoryPresenter(output));
       },
     );
