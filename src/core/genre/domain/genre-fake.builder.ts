@@ -33,7 +33,7 @@ export class GenreFakeBuilder<TBuild = any> {
     this.chance = new Chance();
   }
 
-  withGenreId(valueOrFactory: PropOrFactory<Uuid>) {
+  withGenreId(valueOrFactory: PropOrFactory<GenreId>) {
     this._genreId = valueOrFactory;
     return this;
   }
@@ -98,9 +98,55 @@ export class GenreFakeBuilder<TBuild = any> {
     return this.countObjs === 1 ? (genres[0] as any) : genres;
   }
 
+  get genreId() {
+    return this.getValue('genreId');
+  }
+
+  get name() {
+    return this.getValue('name');
+  }
+
+  get categoriesId() {
+    let categoriesId = this.getValue('categoriesId');
+
+    if (!categoriesId.length) {
+      categoriesId = [new CategoryId()];
+    }
+
+    return categoriesId;
+  }
+
+  get isActive() {
+    return this.getValue('isActive');
+  }
+
+  get createdAt() {
+    return this.getValue('createdAt');
+  }
+
+  private getValue(prop: string) {
+    const optional = ['genreId', 'createdAt'];
+
+    const privateProp = `_${prop}` as keyof this;
+
+    if (!this[privateProp] && optional.includes(prop)) {
+      throw new Error(
+        `Property ${prop} not have a factory, use 'with' methods`,
+      );
+    }
+
+    return this.callFactory(this[privateProp], 0);
+  }
+
   private callFactory(factoryOrValue: PropOrFactory<any>, index: number) {
-    return typeof factoryOrValue === 'function'
-      ? factoryOrValue(index)
-      : factoryOrValue;
+    if (typeof factoryOrValue === 'function') {
+      return factoryOrValue(index);
+    }
+
+    if (factoryOrValue instanceof Array) {
+      return factoryOrValue.map((value) => this.callFactory(value, index));
+    }
+
+    return factoryOrValue;
   }
 }

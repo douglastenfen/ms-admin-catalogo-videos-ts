@@ -7,6 +7,8 @@ declare global {
       notificationContainsErrorMessages: (
         expected: Array<string | { [key: string]: string[] }>,
       ) => R;
+
+      toBeValueObject: (expected: ValueObject) => R;
     }
   }
 }
