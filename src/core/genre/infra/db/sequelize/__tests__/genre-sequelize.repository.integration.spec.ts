@@ -982,6 +982,30 @@ describe('GenreSequelizeRepository Integration Tests', () => {
       });
     });
 
+    describe('findByIds method', () => {
+      it('should find genres by ids', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepository.insert(category);
+
+        const genres = Genre.fake()
+          .theGenres(2)
+          .addCategoriesId(category.categoryID)
+          .build();
+
+        await uow.start();
+
+        await genreRepository.bulkInsert(genres);
+
+        const result = await genreRepository.findByIds(
+          genres.map((genre) => genre.genreId),
+        );
+
+        expect(result).toHaveLength(2);
+
+        await uow.commit();
+      });
+    });
+
     describe('findAll method', () => {
       it('should find all genres', async () => {
         const category = Category.fake().aCategory().build();
