@@ -52,7 +52,7 @@ export class UnitOfWorkSequelize implements IUnitOfWork {
         return result;
       });
     } catch (e) {
-      if (isAutoTransaction) {
+      if (!isAutoTransaction) {
         await this.transaction?.rollback();
       }
 

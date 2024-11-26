@@ -2,7 +2,7 @@ import { SortDirection } from '@core/shared/domain/repository/search-params';
 import { literal, Op } from 'sequelize';
 import { NotFoundError } from '../../../../shared/domain/errors/not-found.error';
 import { Uuid } from '../../../../shared/domain/value-objects/uuid.vo';
-import { Category } from '../../../domain/category.aggregate';
+import { Category, CategoryId } from '../../../domain/category.aggregate';
 import {
   CategorySearchParams,
   CategorySearchResult,
@@ -10,6 +10,7 @@ import {
 } from '../../../domain/category.repository';
 import { CategoryModel } from './category.model';
 import { CategoryModelMapper } from './category.model.mapper';
+import { InvalidArgumentError } from '@core/shared/domain/errors/invalid-argument.error';
 
 export class CategorySequelizeRepository implements ICategoryRepository {
   sortableFields: string[] = ['name', 'createdAt'];
@@ -77,6 +78,46 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     return models.map((model) => {
       return CategoryModelMapper.toEntity(model);
     });
+  }
+
+  async findByIds(ids: Uuid[]): Promise<Category[]> {
+    const models = await this.categoryModel.findAll({
+      where: { categoryID: ids.map((id) => id.id) },
+    });
+
+    return models.map((model) => CategoryModelMapper.toEntity(model));
+  }
+
+  async existsById(
+    ids: Uuid[],
+  ): Promise<{ exists: Uuid[]; notExists: Uuid[] }> {
+    if (!ids.length) {
+      throw new InvalidArgumentError(
+        'ids must be an array with at least one element',
+      );
+    }
+
+    const existsCategoryModels = await this.categoryModel.findAll({
+      attributes: ['categoryID'],
+      where: {
+        categoryID: {
+          [Op.in]: ids.map((id) => id.id),
+        },
+      },
+    });
+
+    const existsCategoryIds = existsCategoryModels.map(
+      (model) => new CategoryId(model.categoryID),
+    );
+
+    const notExistsCategoryIds = ids.filter(
+      (id) => !existsCategoryIds.some((model) => model.equals(id)),
+    );
+
+    return {
+      exists: existsCategoryIds,
+      notExists: notExistsCategoryIds,
+    };
   }
 
   async search(props: CategorySearchParams): Promise<CategorySearchResult> {
