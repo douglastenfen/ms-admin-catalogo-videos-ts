@@ -37,7 +37,7 @@ export class Genre extends AggregateRoot {
     this.createdAt = props.createdAt ?? new Date();
   }
 
-  get entityID(): ValueObject {
+  get entityId(): ValueObject {
     return this.genreId;
   }
 

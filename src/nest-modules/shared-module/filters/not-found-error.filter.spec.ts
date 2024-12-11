@@ -6,7 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 
 class StubEntity extends Entity {
-  entityID: any;
+  entityId: any;
 
   toJSON(): Required<any> {
     return {};

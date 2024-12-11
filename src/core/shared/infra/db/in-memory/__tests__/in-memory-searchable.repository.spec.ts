@@ -10,19 +10,19 @@ type StubEntityConstructorProps = {
 };
 
 class StubEntity extends Entity {
-  entityID: Uuid;
+  entityId: Uuid;
   name: string;
 
   constructor(props: StubEntityConstructorProps) {
     super();
 
-    this.entityID = props.entityID || new Uuid();
+    this.entityId = props.entityID || new Uuid();
     this.name = props.name;
   }
 
   toJSON() {
     return {
-      entityID: this.entityID.id,
+      entityID: this.entityId.id,
       name: this.name,
     };
   }

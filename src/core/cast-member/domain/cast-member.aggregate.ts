@@ -60,7 +60,7 @@ export class CastMember extends AggregateRoot {
     return CastMemberFakeBuilder;
   }
 
-  get entityID() {
+  get entityId() {
     return this.castMemberId;
   }
   toJSON() {
