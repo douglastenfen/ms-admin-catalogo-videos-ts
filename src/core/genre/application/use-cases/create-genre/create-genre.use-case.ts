@@ -18,7 +18,7 @@ export class CreateGenreUseCase
     private categoriesIdExistsInDb: CategoriesIdExistsInDatabaseValidator,
   ) {}
 
-  async execute(input: CreateGenreInput): Promise<GenreOutput> {
+  async execute(input: CreateGenreInput): Promise<CreateGenreOutput> {
     const [categoriesId, errorsCategoriesId] = (
       await this.categoriesIdExistsInDb.validate(input.categoriesId)
     ).asArray();

@@ -12,6 +12,7 @@ import { SortDirection } from '@core/shared/domain/repository/search-params';
 import { literal, Op } from 'sequelize';
 import { CastMemberModel } from './cast-member.model';
 import { CastMemberModelMapper } from './cast-member.model.mapper';
+import { InvalidArgumentError } from '@core/shared/domain/errors/invalid-argument.error';
 
 export class CastMemberSequelizeRepository implements ICastMemberRepository {
   sortableFields: string[] = ['name', 'createdAt'];
@@ -44,6 +45,46 @@ export class CastMemberSequelizeRepository implements ICastMemberRepository {
     const model = await this._getById(entityId.id);
 
     return model ? CastMemberModelMapper.toEntity(model) : null;
+  }
+
+  async findByIds(ids: CastMemberId[]): Promise<CastMember[]> {
+    const models = await this.castMemberModel.findAll({
+      where: {
+        castMemberId: ids.map((id) => id.id),
+      },
+    });
+
+    return models.map((model) => CastMemberModelMapper.toEntity(model));
+  }
+
+  async existsById(
+    ids: CastMemberId[],
+  ): Promise<{ exists: CastMemberId[]; notExists: CastMemberId[] }> {
+    if (!ids.length) {
+      throw new InvalidArgumentError(
+        'ids must be an array with at least one element',
+      );
+    }
+
+    const existsCastMemberModels = await this.castMemberModel.findAll({
+      attributes: ['castMemberId'],
+      where: {
+        castMemberId: ids.map((id) => id.id),
+      },
+    });
+
+    const existsCastMemberIds = existsCastMemberModels.map(
+      (model) => new CastMemberId(model.castMemberId),
+    );
+
+    const notExistsCastMemberIds = ids.filter(
+      (id) => !existsCastMemberIds.find((model) => model.equals(id)),
+    );
+
+    return {
+      exists: existsCastMemberIds,
+      notExists: notExistsCastMemberIds,
+    };
   }
 
   private async _getById(id: string): Promise<CastMemberModel | null> {

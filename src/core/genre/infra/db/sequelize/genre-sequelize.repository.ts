@@ -18,7 +18,7 @@ export class GenreSequelizeRepository implements IGenreRepository {
   orderBy = {
     mysql: {
       name: (sortDir: SortDirection) =>
-        literal(`binary ${this.genreModel.name}.name ${sortDir}`),
+        `binary ${this.genreModel.name}.name ${sortDir}`,
     },
   };
 
