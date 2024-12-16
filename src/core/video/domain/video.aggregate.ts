@@ -4,6 +4,7 @@ import { GenreId } from '@core/genre/domain/genre.aggregate';
 import { AggregateRoot } from '@core/shared/domain/aggregate-root';
 import { ValueObject } from '@core/shared/domain/value-object';
 import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
+import { Banner } from './banner.vo';
 import { Rating } from './rating.vo';
 
 export type VideoConstructorProps = {
@@ -15,6 +16,7 @@ export type VideoConstructorProps = {
   rating: Rating;
   isOpened: boolean;
   isPublished: boolean;
+  banner?: Banner;
   categoriesId: Map<string, CategoryId>;
   genresId: Map<string, GenreId>;
   castMembersId: Map<string, CastMemberId>;
@@ -29,6 +31,7 @@ export type VideoCreateCommand = {
   rating: Rating;
   isOpened: boolean;
   isPublished: boolean;
+  banner?: Banner;
   categoriesId: CategoryId[];
   genresId: GenreId[];
   castMembersId: CastMemberId[];
@@ -45,6 +48,7 @@ export class Video extends AggregateRoot {
   rating: Rating;
   isOpened: boolean;
   isPublished: boolean;
+  banner: Banner | null;
   categoriesId: Map<string, CategoryId>;
   genresId: Map<string, GenreId>;
   castMembersId: Map<string, CastMemberId>;
@@ -60,6 +64,7 @@ export class Video extends AggregateRoot {
     this.rating = props.rating;
     this.isOpened = props.isOpened;
     this.isPublished = props.isPublished;
+    this.banner = props.banner ?? null;
     this.categoriesId = props.categoriesId;
     this.genresId = props.genresId;
     this.castMembersId = props.castMembersId;
