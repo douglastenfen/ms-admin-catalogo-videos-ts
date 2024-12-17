@@ -6,6 +6,8 @@ import { ValueObject } from '@core/shared/domain/value-object';
 import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
 import { Banner } from './banner.vo';
 import { Rating } from './rating.vo';
+import { ThumbnailHalf } from './thumbnail-half.vo';
+import { Thumbnail } from './thumbnail.vo';
 
 export type VideoConstructorProps = {
   videoId?: VideoId;
@@ -17,6 +19,8 @@ export type VideoConstructorProps = {
   isOpened: boolean;
   isPublished: boolean;
   banner?: Banner;
+  thumbnail?: Thumbnail;
+  thumbnailHalf?: ThumbnailHalf;
   categoriesId: Map<string, CategoryId>;
   genresId: Map<string, GenreId>;
   castMembersId: Map<string, CastMemberId>;
@@ -32,6 +36,8 @@ export type VideoCreateCommand = {
   isOpened: boolean;
   isPublished: boolean;
   banner?: Banner;
+  thumbnail?: Thumbnail;
+  thumbnailHalf?: ThumbnailHalf;
   categoriesId: CategoryId[];
   genresId: GenreId[];
   castMembersId: CastMemberId[];
@@ -49,6 +55,8 @@ export class Video extends AggregateRoot {
   isOpened: boolean;
   isPublished: boolean;
   banner: Banner | null;
+  thumbnail: Thumbnail | null;
+  thumbnailHalf: ThumbnailHalf | null;
   categoriesId: Map<string, CategoryId>;
   genresId: Map<string, GenreId>;
   castMembersId: Map<string, CastMemberId>;
@@ -65,6 +73,8 @@ export class Video extends AggregateRoot {
     this.isOpened = props.isOpened;
     this.isPublished = props.isPublished;
     this.banner = props.banner ?? null;
+    this.thumbnail = props.thumbnail ?? null;
+    this.thumbnailHalf = props.thumbnailHalf ?? null;
     this.categoriesId = props.categoriesId;
     this.genresId = props.genresId;
     this.castMembersId = props.castMembersId;
@@ -177,6 +187,9 @@ export class Video extends AggregateRoot {
       rating: this.rating.value,
       isOpened: this.isOpened,
       isPublished: this.isPublished,
+      banner: this.banner ? this.banner.toJSON() : null,
+      thumbnail: this.thumbnail ? this.thumbnail.toJSON() : null,
+      thumbnailHalf: this.thumbnailHalf ? this.thumbnailHalf.toJSON() : null,
       categoriesId: Array.from(this.categoriesId.values()).map((id) => id.id),
       genresId: Array.from(this.genresId.values()).map((id) => id.id),
       castMembersId: Array.from(this.castMembersId.values()).map((id) => id.id),
