@@ -8,6 +8,9 @@ import { Banner } from './banner.vo';
 import { Rating } from './rating.vo';
 import { ThumbnailHalf } from './thumbnail-half.vo';
 import { Thumbnail } from './thumbnail.vo';
+import { Trailer } from './trailer.vo';
+import { VideoMedia } from './video-media.vo';
+import VideoValidatorFactory from './video.validator';
 
 export type VideoConstructorProps = {
   videoId?: VideoId;
@@ -21,6 +24,8 @@ export type VideoConstructorProps = {
   banner?: Banner;
   thumbnail?: Thumbnail;
   thumbnailHalf?: ThumbnailHalf;
+  trailer?: Trailer;
+  video?: VideoMedia;
   categoriesId: Map<string, CategoryId>;
   genresId: Map<string, GenreId>;
   castMembersId: Map<string, CastMemberId>;
@@ -38,6 +43,8 @@ export type VideoCreateCommand = {
   banner?: Banner;
   thumbnail?: Thumbnail;
   thumbnailHalf?: ThumbnailHalf;
+  trailer?: Trailer;
+  video?: VideoMedia;
   categoriesId: CategoryId[];
   genresId: GenreId[];
   castMembersId: CastMemberId[];
@@ -57,6 +64,8 @@ export class Video extends AggregateRoot {
   banner: Banner | null;
   thumbnail: Thumbnail | null;
   thumbnailHalf: ThumbnailHalf | null;
+  trailer?: Trailer | null;
+  video?: VideoMedia | null;
   categoriesId: Map<string, CategoryId>;
   genresId: Map<string, GenreId>;
   castMembersId: Map<string, CastMemberId>;
@@ -75,6 +84,8 @@ export class Video extends AggregateRoot {
     this.banner = props.banner ?? null;
     this.thumbnail = props.thumbnail ?? null;
     this.thumbnailHalf = props.thumbnailHalf ?? null;
+    this.trailer = props.trailer ?? null;
+    this.video = props.video ?? null;
     this.categoriesId = props.categoriesId;
     this.genresId = props.genresId;
     this.castMembersId = props.castMembersId;
@@ -94,11 +105,15 @@ export class Video extends AggregateRoot {
       isPublished: false,
     });
 
+    video.validate(['title']);
+
     return video;
   }
 
   changeTitle(title: string) {
     this.title = title;
+
+    this.validate(['title']);
   }
 
   changeDescription(description: string) {
@@ -173,6 +188,12 @@ export class Video extends AggregateRoot {
     this.castMembersId = new Map(castMembersId.map((id) => [id.id, id]));
   }
 
+  validate(fields?: string[]) {
+    const validator = VideoValidatorFactory.create();
+
+    return validator.validate(this.notification, this, fields);
+  }
+
   get entityId(): ValueObject {
     return this.videoId;
   }
@@ -190,6 +211,8 @@ export class Video extends AggregateRoot {
       banner: this.banner ? this.banner.toJSON() : null,
       thumbnail: this.thumbnail ? this.thumbnail.toJSON() : null,
       thumbnailHalf: this.thumbnailHalf ? this.thumbnailHalf.toJSON() : null,
+      trailer: this.trailer ? this.trailer.toJSON() : null,
+      video: this.video ? this.video.toJSON() : null,
       categoriesId: Array.from(this.categoriesId.values()).map((id) => id.id),
       genresId: Array.from(this.genresId.values()).map((id) => id.id),
       castMembersId: Array.from(this.castMembersId.values()).map((id) => id.id),
