@@ -40,7 +40,6 @@ export type VideoCreateCommand = {
   duration: number;
   rating: Rating;
   isOpened: boolean;
-  isPublished: boolean;
   banner?: Banner;
   thumbnail?: Thumbnail;
   thumbnailHalf?: ThumbnailHalf;
