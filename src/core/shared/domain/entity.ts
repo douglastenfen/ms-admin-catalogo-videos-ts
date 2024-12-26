@@ -4,6 +4,6 @@ import { ValueObject } from './value-object';
 export abstract class Entity {
   notification: Notification = new Notification();
 
-  abstract get entityID(): ValueObject;
+  abstract get entityId(): ValueObject;
   abstract toJSON(): any;
 }

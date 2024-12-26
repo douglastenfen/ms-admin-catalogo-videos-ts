@@ -9,19 +9,19 @@ type StubEntityConstructor = {
 };
 
 class StubEntity extends Entity {
-  entityID: Uuid;
+  entityId: Uuid;
   name: string;
 
   constructor(props: StubEntityConstructor) {
     super();
 
-    this.entityID = props.entityID || new Uuid();
+    this.entityId = props.entityID || new Uuid();
     this.name = props.name;
   }
 
   toJSON() {
     return {
-      entityID: this.entityID.id,
+      entityID: this.entityId.id,
       name: this.name,
     };
   }
@@ -80,7 +80,7 @@ describe('InMemoryRepository Unit Tests', () => {
     const entity = new StubEntity({ name: 'Test' });
 
     await expect(repo.update(entity)).rejects.toThrow(
-      new NotFoundError(entity.entityID, StubEntity),
+      new NotFoundError(entity.entityId, StubEntity),
     );
   });
 
@@ -90,7 +90,7 @@ describe('InMemoryRepository Unit Tests', () => {
     await repo.insert(entity);
 
     const entityUpdated = new StubEntity({
-      entityID: entity.entityID,
+      entityID: entity.entityId,
       name: 'Test Updated',
     });
 
@@ -118,7 +118,7 @@ describe('InMemoryRepository Unit Tests', () => {
 
     await repo.insert(entity);
 
-    await repo.delete(entity.entityID);
+    await repo.delete(entity.entityId);
     expect(repo.items).toHaveLength(0);
   });
 });

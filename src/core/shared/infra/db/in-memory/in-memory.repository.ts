@@ -29,11 +29,11 @@ export abstract class InMemoryRepository<
 
   async update(entity: E): Promise<void> {
     const indexFound = this.items.findIndex((item) =>
-      item.entityID.equals(entity.entityID),
+      item.entityId.equals(entity.entityId),
     );
 
     if (indexFound === -1) {
-      throw new NotFoundError(entity.entityID, this.getEntity());
+      throw new NotFoundError(entity.entityId, this.getEntity());
     }
 
     this.items[indexFound] = entity;
@@ -41,7 +41,7 @@ export abstract class InMemoryRepository<
 
   async delete(entityID: EntityID): Promise<void> {
     const indexFound = this.items.findIndex((item) =>
-      item.entityID.equals(entityID),
+      item.entityId.equals(entityID),
     );
 
     if (indexFound === -1) {
@@ -52,7 +52,7 @@ export abstract class InMemoryRepository<
   }
 
   async findByID(entityID: EntityID): Promise<E | null> {
-    const entity = this.items.find((item) => item.entityID.equals(entityID));
+    const entity = this.items.find((item) => item.entityId.equals(entityID));
 
     return typeof entity === 'undefined' ? null : entity;
   }
@@ -63,7 +63,7 @@ export abstract class InMemoryRepository<
 
   async findByIds(ids: EntityID[]): Promise<E[]> {
     return this.items.filter((item) => {
-      return ids.some((id) => item.entityID.equals(id));
+      return ids.some((id) => item.entityId.equals(id));
     });
   }
 
@@ -84,7 +84,7 @@ export abstract class InMemoryRepository<
     const notExistsId = new Set<EntityID>();
 
     ids.forEach((id) => {
-      const item = this.items.find((item) => item.entityID.equals(id));
+      const item = this.items.find((item) => item.entityId.equals(id));
 
       item ? existsId.add(id) : notExistsId.add(id);
     });
