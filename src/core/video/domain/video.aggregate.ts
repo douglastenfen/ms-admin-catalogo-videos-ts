@@ -6,10 +6,13 @@ import { ValueObject } from '@core/shared/domain/value-object';
 import { AudioVideoMediaStatus } from '@core/shared/domain/value-objects/audio-video-media.vo';
 import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
 import { Banner } from './banner.vo';
+import { AudioVideoMediaReplacedEvent } from './domain-events/audio-video-media-replaced.event';
+import { VideoCreatedEvent } from './domain-events/video-created.event';
 import { Rating } from './rating.vo';
 import { ThumbnailHalf } from './thumbnail-half.vo';
 import { Thumbnail } from './thumbnail.vo';
 import { Trailer } from './trailer.vo';
+import { VideoFakeBuilder } from './video-fake.builder';
 import { VideoMedia } from './video-media.vo';
 import VideoValidatorFactory from './video.validator';
 
@@ -90,6 +93,16 @@ export class Video extends AggregateRoot {
     this.genresId = props.genresId;
     this.castMembersId = props.castMembersId;
     this.createdAt = props.createdAt ?? new Date();
+
+    this.registerHandler(
+      VideoCreatedEvent.name,
+      this.onVideoCreated.bind(this),
+    );
+
+    this.registerHandler(
+      AudioVideoMediaReplacedEvent.name,
+      this.onAudioVideoMediaReplaced.bind(this),
+    );
   }
 
   static create(props: VideoCreateCommand) {
@@ -107,7 +120,27 @@ export class Video extends AggregateRoot {
 
     video.validate(['title']);
 
-    video.markAsPublished();
+    video.applyEvent(
+      new VideoCreatedEvent({
+        videoId: video.videoId,
+        title: video.title,
+        description: video.description,
+        releasedYear: video.releasedYear,
+        duration: video.duration,
+        rating: video.rating,
+        isOpened: video.isOpened,
+        isPublished: video.isPublished,
+        banner: video.banner,
+        thumbnail: video.thumbnail,
+        thumbnailHalf: video.thumbnailHalf,
+        trailer: video.trailer!,
+        video: video.video!,
+        categoriesId: Array.from(video.categoriesId.values()),
+        genresId: Array.from(video.genresId.values()),
+        castMembersId: Array.from(video.castMembersId.values()),
+        createdAt: video.createdAt,
+      }),
+    );
 
     return video;
   }
@@ -156,21 +189,26 @@ export class Video extends AggregateRoot {
 
   replaceTrailer(trailer: Trailer): void {
     this.trailer = trailer;
+
+    this.applyEvent(
+      new AudioVideoMediaReplacedEvent({
+        aggregateId: this.videoId,
+        media: trailer,
+        mediaType: 'trailer',
+      }),
+    );
   }
 
   replaceVideo(video: VideoMedia): void {
     this.video = video;
-  }
 
-  private markAsPublished() {
-    if (
-      this.trailer &&
-      this.video &&
-      this.trailer.status === AudioVideoMediaStatus.COMPLETED &&
-      this.video.status === AudioVideoMediaStatus.COMPLETED
-    ) {
-      this.isPublished = true;
-    }
+    this.applyEvent(
+      new AudioVideoMediaReplacedEvent({
+        aggregateId: this.videoId,
+        media: video,
+        mediaType: 'trailer',
+      }),
+    );
   }
 
   addCategoryId(categoryId: CategoryId) {
@@ -221,6 +259,33 @@ export class Video extends AggregateRoot {
     this.castMembersId = new Map(castMembersId.map((id) => [id.id, id]));
   }
 
+  onVideoCreated(event: VideoCreatedEvent) {
+    if (this.isPublished) {
+      return;
+    }
+
+    this.tryMarkAsPublished();
+  }
+
+  onAudioVideoMediaReplaced(event: AudioVideoMediaReplacedEvent) {
+    if (this.isPublished) {
+      return;
+    }
+
+    this.tryMarkAsPublished();
+  }
+
+  private tryMarkAsPublished() {
+    if (
+      this.trailer &&
+      this.video &&
+      this.trailer.status === AudioVideoMediaStatus.COMPLETED &&
+      this.video.status === AudioVideoMediaStatus.COMPLETED
+    ) {
+      this.isPublished = true;
+    }
+  }
+
   validate(fields?: string[]) {
     const validator = VideoValidatorFactory.create();
 
@@ -229,6 +294,10 @@ export class Video extends AggregateRoot {
 
   get entityId(): ValueObject {
     return this.videoId;
+  }
+
+  static fake() {
+    return VideoFakeBuilder;
   }
 
   toJSON() {
