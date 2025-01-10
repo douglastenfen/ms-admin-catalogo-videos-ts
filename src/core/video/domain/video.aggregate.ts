@@ -12,6 +12,7 @@ import { Rating } from './rating.vo';
 import { ThumbnailHalf } from './thumbnail-half.vo';
 import { Thumbnail } from './thumbnail.vo';
 import { Trailer } from './trailer.vo';
+import { VideoFakeBuilder } from './video-fake.builder';
 import { VideoMedia } from './video-media.vo';
 import VideoValidatorFactory from './video.validator';
 
@@ -99,7 +100,7 @@ export class Video extends AggregateRoot {
     );
 
     this.registerHandler(
-      VideoCreatedEvent.name,
+      AudioVideoMediaReplacedEvent.name,
       this.onAudioVideoMediaReplaced.bind(this),
     );
   }
@@ -118,8 +119,6 @@ export class Video extends AggregateRoot {
     });
 
     video.validate(['title']);
-
-    video.tryMarkAsPublished();
 
     video.applyEvent(
       new VideoCreatedEvent({
@@ -261,13 +260,17 @@ export class Video extends AggregateRoot {
   }
 
   onVideoCreated(event: VideoCreatedEvent) {
-    if (this.isPublished) return;
+    if (this.isPublished) {
+      return;
+    }
 
     this.tryMarkAsPublished();
   }
 
   onAudioVideoMediaReplaced(event: AudioVideoMediaReplacedEvent) {
-    if (this.isPublished) return;
+    if (this.isPublished) {
+      return;
+    }
 
     this.tryMarkAsPublished();
   }
@@ -291,6 +294,10 @@ export class Video extends AggregateRoot {
 
   get entityId(): ValueObject {
     return this.videoId;
+  }
+
+  static fake() {
+    return VideoFakeBuilder;
   }
 
   toJSON() {
