@@ -12,6 +12,8 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { ImageMediaModel } from './image-media.model';
+import { AudioVideoMediaModel } from './audio-video-media.model';
 
 export type VideoModelProps = {
   videoId: string;
@@ -22,7 +24,8 @@ export type VideoModelProps = {
   rating: RatingValues;
   isOpened: boolean;
   isPublished: boolean;
-
+  imageMedias: ImageMediaModel[];
+  audioVideoMedias: AudioVideoMediaModel[];
   categoriesId: VideoCategoryModel[];
   categories: CategoryModel[];
   genresId: VideoGenreModel[];
@@ -68,6 +71,12 @@ export class VideoModel extends Model<VideoModelProps> {
 
   @Column({ field: 'is_published', allowNull: false, type: DataType.BOOLEAN })
   declare isPublished: boolean;
+
+  @HasMany(() => ImageMediaModel, 'videoId')
+  declare imageMedias: ImageMediaModel[];
+
+  @HasMany(() => AudioVideoMediaModel, 'videoId')
+  declare audioVideoMedias: AudioVideoMediaModel[];
 
   @HasMany(() => VideoCategoryModel, 'videoId')
   declare categoriesId: VideoCategoryModel[];
