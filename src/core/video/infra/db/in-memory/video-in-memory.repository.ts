@@ -10,7 +10,7 @@ export class VideoInMemoryRepository
   extends InMemorySearchableRepository<Video, VideoId, VideoFilter>
   implements IVideoRepository
 {
-  sortableFields: string[] = ['title', 'created_at'];
+  sortableFields: string[] = ['title', 'createdAt'];
 
   protected async applyFilter(
     items: Video[],
@@ -53,7 +53,7 @@ export class VideoInMemoryRepository
     sortDir: SortDirection | null,
   ): Video[] {
     return !sort
-      ? super.applySort(items, 'created_at', 'desc')
+      ? super.applySort(items, 'createdAt', 'desc')
       : super.applySort(items, sort, sortDir);
   }
 

@@ -1,7 +1,4 @@
-import {
-  AudioVideoMedia,
-  AudioVideoMediaStatus,
-} from '@core/shared/domain/value-objects/audio-video-media.vo';
+import { AudioVideoMediaStatus } from '@core/shared/domain/value-objects/audio-video-media.vo';
 import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
 import {
   Column,
@@ -29,9 +26,9 @@ export type AudioVideoMediaModelProps = {
 };
 
 @Table({
-  tableName: 'audio_video_media',
+  tableName: 'audio_video_medias',
   timestamps: false,
-  indexes: [{ fields: ['videoId', 'videoRelatedField'], unique: true }],
+  indexes: [{ fields: ['video_id', 'video_related_field'], unique: true }],
 })
 export class AudioVideoMediaModel extends Model<AudioVideoMediaModelProps> {
   @PrimaryKey
@@ -45,10 +42,18 @@ export class AudioVideoMediaModel extends Model<AudioVideoMediaModelProps> {
   @Column({ allowNull: false, type: DataType.STRING(255) })
   declare name: string;
 
-  @Column({ allowNull: false, type: DataType.STRING(255) })
+  @Column({
+    field: 'raw_location',
+    allowNull: false,
+    type: DataType.STRING(255),
+  })
   declare rawLocation: string;
 
-  @Column({ allowNull: true, type: DataType.STRING(255) })
+  @Column({
+    field: 'encoded_location',
+    allowNull: true,
+    type: DataType.STRING(255),
+  })
   declare encodedLocation: string | null;
 
   @Column({

@@ -24,9 +24,9 @@ export type ImageMediaModelProps = {
 };
 
 @Table({
-  tableName: 'image_media',
+  tableName: 'image_medias',
   timestamps: false,
-  indexes: [{ fields: ['videoId', 'videoRelatedField'], unique: true }],
+  indexes: [{ fields: ['video_id', 'video_related_field'], unique: true }],
 })
 export class ImageMediaModel extends Model<ImageMediaModelProps> {
   @PrimaryKey

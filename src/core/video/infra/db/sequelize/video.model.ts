@@ -27,11 +27,11 @@ export type VideoModelProps = {
   imageMedias: ImageMediaModel[];
   audioVideoMedias: AudioVideoMediaModel[];
   categoriesId: VideoCategoryModel[];
-  categories: CategoryModel[];
+  categories?: CategoryModel[];
   genresId: VideoGenreModel[];
-  genres: GenreModel[];
+  genres?: GenreModel[];
   castMembersId: VideoCastMemberModel[];
-  castMembers: CastMemberModel[];
+  castMembers?: CastMemberModel[];
   createdAt: Date;
 };
 
