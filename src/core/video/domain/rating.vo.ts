@@ -59,9 +59,9 @@ export class Rating extends ValueObject {
 export class InvalidRatingError extends Error {
   constructor(value: any) {
     super(
-      `The rating must be one of following values: ${Object.values(
+      `The rating must be one of the following values: ${Object.values(
         RatingValues,
-      ).join(', ')}, passed value: ${value}`,
+      ).join(', ')} passed value: ${value}`,
     );
   }
 }

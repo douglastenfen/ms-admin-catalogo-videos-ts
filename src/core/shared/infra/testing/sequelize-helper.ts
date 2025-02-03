@@ -11,13 +11,9 @@ export function setupSequelize(options: SequelizeOptions = {}) {
     });
   });
 
-  beforeEach(async () => {
-    await _sequelize.sync({ force: true });
-  });
+  beforeEach(async () => await _sequelize.sync({ force: true }));
 
-  afterAll(async () => {
-    await _sequelize.close();
-  });
+  afterAll(async () => await _sequelize.close());
 
   return {
     get sequelize() {
