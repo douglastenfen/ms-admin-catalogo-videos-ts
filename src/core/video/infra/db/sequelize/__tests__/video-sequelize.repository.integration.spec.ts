@@ -27,7 +27,7 @@ import {
 } from '@core/video/domain/video.repository';
 
 describe('VideoSequelizeRepository Integration Tests', () => {
-  const sequelizeHelper = setupSequelizeForVideo({ logging: true });
+  const sequelizeHelper = setupSequelizeForVideo();
 
   let videoRepository: VideoSequelizeRepository;
   let categoryRepository: CategorySequelizeRepository;
