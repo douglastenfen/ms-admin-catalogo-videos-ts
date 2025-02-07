@@ -1,5 +1,5 @@
 import { Video } from '@core/video/domain/video.aggregate';
-import { VideoOutputMapper } from '../video-output';
+import { VideoOutputMapper } from '../video.output';
 import { Category } from '@core/category/domain/category.aggregate';
 import { Genre } from '@core/genre/domain/genre.aggregate';
 import { CastMember } from '@core/cast-member/domain/cast-member.aggregate';
