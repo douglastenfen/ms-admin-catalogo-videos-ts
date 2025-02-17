@@ -21,6 +21,9 @@ import { Category } from '@core/category/domain/category.aggregate';
 import { Genre } from '@core/genre/domain/genre.aggregate';
 import { CastMember } from '@core/cast-member/domain/cast-member.aggregate';
 import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
+import { Config } from '@core/shared/infra/config';
+import { GoogleCloudStorage } from '@core/shared/infra/storage/google-cloud.storage';
+import { Storage as GoogleCloudStorageSdk } from '@google-cloud/storage';
 
 describe('UploadImageMediasUseCase Integration Tests', () => {
   let uploadImageMediasUseCase: UploadImageMediasUseCase;
@@ -41,7 +44,12 @@ describe('UploadImageMediasUseCase Integration Tests', () => {
     castMemberRepository = new CastMemberSequelizeRepository(CastMemberModel);
     videoRepository = new VideoSequelizeRepository(VideoModel, uow);
 
-    storageService = new InMemoryStorage();
+    // storageService = new InMemoryStorage();
+    const storageSdk = new GoogleCloudStorageSdk({
+      credentials: Config.googleCredentials(),
+    });
+
+    storageService = new GoogleCloudStorage(storageSdk, Config.bucketName());
 
     uploadImageMediasUseCase = new UploadImageMediasUseCase(
       videoRepository,
@@ -112,7 +120,7 @@ describe('UploadImageMediasUseCase Integration Tests', () => {
         },
       ]);
     }
-  });
+  }, 10000);
 
   it('should upload banner image', async () => {
     const storeSpy = jest.spyOn(storageService, 'store');
@@ -156,5 +164,5 @@ describe('UploadImageMediasUseCase Integration Tests', () => {
       id: videoUpdated!.banner!.url,
       mimeType: 'image/jpeg',
     });
-  });
+  }, 10000);
 });
