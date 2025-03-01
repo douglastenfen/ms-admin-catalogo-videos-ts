@@ -5,7 +5,7 @@ import { ConfigModule } from './nest-modules/config-module/config.module';
 import { DatabaseModule } from './nest-modules/database-module/database.module';
 import { GenresModule } from './nest-modules/genres-module/genres.module';
 import { SharedModule } from './nest-modules/shared-module/shared.module';
-import { VideosModule } from './nest-modules/videos-module/videos.module';
+// import { VideosModule } from './nest-modules/videos-module/videos.module';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { VideosModule } from './nest-modules/videos-module/videos.module';
     CastMembersModule,
     SharedModule,
     GenresModule,
-    VideosModule,
+    // VideosModule,
   ],
 })
 export class AppModule {}
