@@ -143,7 +143,7 @@ export const USE_CASES = {
     useFactory: (uow: IUnitOfWork, videoRepository: IVideoRepository) => {
       return new ProcessAudioVideoMediaUseCase(uow, videoRepository);
     },
-    inject: ['IUnitOfWork', REPOSITORIES.VIDEO_REPOSITORY.provide],
+    inject: ['UnitOfWork', REPOSITORIES.VIDEO_REPOSITORY.provide],
   },
 };
 
