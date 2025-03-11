@@ -32,6 +32,7 @@ import { VIDEOS_PROVIDERS } from './videos.provider';
   providers: [
     ...Object.values(VIDEOS_PROVIDERS.REPOSITORIES),
     ...Object.values(VIDEOS_PROVIDERS.USE_CASES),
+    ...Object.values(VIDEOS_PROVIDERS.HANDLERS),
   ],
 })
 export class VideosModule {}
