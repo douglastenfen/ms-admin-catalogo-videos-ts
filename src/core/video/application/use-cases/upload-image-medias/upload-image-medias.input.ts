@@ -5,7 +5,7 @@ import {
   ValidateNested,
   validateSync,
 } from 'class-validator';
-import { FileMediaInput } from '../../common/file-media.input';
+import { FileMediaInput } from '../common/file-media.input';
 
 export type UploadImageMediasInputConstructorProps = {
   videoId: string;

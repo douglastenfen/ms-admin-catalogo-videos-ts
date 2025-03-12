@@ -3,7 +3,7 @@ import { ICategoryRepository } from '@core/category/domain/category.repository';
 import { IGenreRepository } from '@core/genre/domain/genre.repository';
 import { IUseCase } from '@core/shared/application/use-case.interface';
 import { IVideoRepository } from '@core/video/domain/video.repository';
-import { VideoOutput, VideoOutputMapper } from '../../common/video.output';
+import { VideoOutput, VideoOutputMapper } from '../common/video.output';
 import { Video, VideoId } from '@core/video/domain/video.aggregate';
 import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
 

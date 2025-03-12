@@ -1,8 +1,13 @@
+import { CreateVideoUseCase } from '@core/video/application/use-cases/create-video/create-video.use-case';
+import { GetVideoUseCase } from '@core/video/application/use-cases/get-video/get-video.use-case';
+import { UpdateVideoInput } from '@core/video/application/use-cases/update-video/update-video.input';
+import { UpdateVideoUseCase } from '@core/video/application/use-cases/update-video/update-video.use-case';
+import { UploadAudioVideoMediaInput } from '@core/video/application/use-cases/upload-audio-video-medias/upload-audio-video-media.input';
+import { UploadAudioVideoMediaUseCase } from '@core/video/application/use-cases/upload-audio-video-medias/upload-audio-video-media.use-case';
 import {
   BadRequestException,
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -13,15 +18,10 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import console from 'console';
 import { CreateVideoDto } from './dto/create-video.dto';
 import { UpdateVideoDto } from './dto/update-video.dto';
-import { CreateVideoUseCase } from '@core/video/application/use-cases/create-video/create-video.use-case';
-import { UpdateVideoUseCase } from '@core/video/application/use-cases/update-video/update-video.use-case';
-import { UploadAudioVideoMediaUseCase } from '@core/video/application/use-cases/upload-audio-video-medias/upload-audio-video-media.use-case';
-import { GetVideoUseCase } from '@core/video/application/use-cases/get-video/get-video.use-case';
-import { UpdateVideoInput } from '@core/video/application/use-cases/update-video/update-video.input';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { UploadAudioVideoMediaInput } from '@core/video/application/use-cases/upload-audio-video-medias/upload-audio-video-media.input';
 
 @Controller('videos')
 export class VideosController {

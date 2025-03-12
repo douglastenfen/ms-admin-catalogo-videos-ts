@@ -206,7 +206,7 @@ export class Video extends AggregateRoot {
       new AudioVideoMediaReplacedEvent({
         aggregateId: this.videoId,
         media: video,
-        mediaType: 'trailer',
+        mediaType: 'video',
       }),
     );
   }
