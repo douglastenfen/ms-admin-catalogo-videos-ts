@@ -22,6 +22,7 @@ import { CAST_MEMBER_PROVIDERS } from '../cast-members-module/cast-members.provi
 import { CATEGORY_PROVIDERS } from '../categories-module/categories.provider';
 import { GENRES_PROVIDERS } from '../genres-module/genres.provider';
 import { PublishVideoMediaReplacedInQueueHandler } from '@core/video/application/handlers/publish-video-media-replaced-in-queue.handler';
+import { IMessageBroker } from '@core/shared/application/message-broker.interface';
 
 export const REPOSITORIES = {
   VIDEO_REPOSITORY: {
@@ -151,7 +152,10 @@ export const USE_CASES = {
 export const HANDLERS = {
   PUBLISH_VIDEO_MEDIA_REPLACED_IN_QUEUE_HANDLER: {
     provide: PublishVideoMediaReplacedInQueueHandler,
-    useClass: PublishVideoMediaReplacedInQueueHandler,
+    useFactory: (messageBroker: IMessageBroker) => {
+      return new PublishVideoMediaReplacedInQueueHandler(messageBroker);
+    },
+    inject: ['IMessageBroker'],
   },
 };
 
