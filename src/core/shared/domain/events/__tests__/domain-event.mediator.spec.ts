@@ -24,13 +24,13 @@ class StubEvent implements IDomainEvent {
 
 class StubIntegrationEvent implements IIntegrationEvent {
   eventVersion: number;
-  ocurredOn: Date;
+  occurredOn: Date;
   payload: any;
   eventName: string;
 
   constructor(event: StubEvent) {
     this.eventVersion = event.eventVersion;
-    this.ocurredOn = event.occurredOn;
+    this.occurredOn = event.occurredOn;
     this.payload = event;
     this.eventName = this.constructor.name;
   }
@@ -98,7 +98,7 @@ describe('DomainEventMediator Unit Tests', () => {
       async (event: StubIntegrationEvent) => {
         expect(event.eventName).toBe(StubIntegrationEvent.name);
         expect(event.eventVersion).toBe(1);
-        expect(event.ocurredOn).toBeInstanceOf(Date);
+        expect(event.occurredOn).toBeInstanceOf(Date);
         expect(event.payload.name).toBe('test');
       },
     );

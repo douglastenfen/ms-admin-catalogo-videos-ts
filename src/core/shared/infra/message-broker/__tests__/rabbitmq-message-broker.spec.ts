@@ -1,14 +1,15 @@
-import { IDomainEvent } from '@core/shared/domain/events/domain-event.interface';
+import { IIntegrationEvent } from '@core/shared/domain/events/domain-event.interface';
 import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
 import { ChannelWrapper } from 'amqp-connection-manager';
-import { RabbitMQMessageBroker } from '../rabbitmq-message-broker';
 import { EVENTS_MESSAGE_BROKER_CONFIG } from '../events-message-broker.config';
+import { RabbitMQMessageBroker } from '../rabbitmq-message-broker';
 
-class TestEvent implements IDomainEvent {
+class TestEvent implements IIntegrationEvent {
   occurredOn: Date = new Date();
   eventVersion: number = 1;
+  eventName: string = TestEvent.name;
 
-  constructor(readonly aggregateId: Uuid) {}
+  constructor(readonly payload: any) {}
 }
 
 describe('RabbitMQMessageBroker Unit Tests', () => {

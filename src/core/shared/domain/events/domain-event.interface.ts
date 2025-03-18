@@ -10,7 +10,7 @@ export interface IDomainEvent {
 
 export interface IIntegrationEvent<T = any> {
   eventVersion: number;
-  ocurredOn: Date;
+  occurredOn: Date;
   payload: T;
   eventName: string;
 }

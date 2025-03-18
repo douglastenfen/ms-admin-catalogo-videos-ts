@@ -15,15 +15,15 @@ import { RabbitmqFakeController } from './rabbitmq-fake/rabbitmq-fake.controller
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    DatabaseModule,
     SharedModule,
+    DatabaseModule,
     EventModule,
     UseCaseModule,
+    RabbitmqModule.forRoot(),
     CategoriesModule,
     CastMembersModule,
     GenresModule,
     VideosModule,
-    RabbitmqModule.forRoot(),
   ],
   providers: [RabbitMQFakeConsumer],
   controllers: [RabbitmqFakeController],

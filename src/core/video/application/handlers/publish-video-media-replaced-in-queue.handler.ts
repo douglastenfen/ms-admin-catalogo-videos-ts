@@ -10,6 +10,6 @@ export class PublishVideoMediaReplacedInQueueHandler
 
   @OnEvent(AudioVideoMediaUploadedIntegrationEvent.name)
   async handle(event: AudioVideoMediaUploadedIntegrationEvent): Promise<void> {
-    console.log(event);
+    await this.messageBroker.publishEvent(event);
   }
 }
