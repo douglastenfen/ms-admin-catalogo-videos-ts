@@ -15,7 +15,6 @@ import { Global, Module, Scope } from '@nestjs/common';
         return new ApplicationService(uow, domainEventMediator);
       },
       inject: ['UnitOfWork', DomainEventMediator],
-      scope: Scope.REQUEST,
     },
   ],
   exports: [ApplicationService],
