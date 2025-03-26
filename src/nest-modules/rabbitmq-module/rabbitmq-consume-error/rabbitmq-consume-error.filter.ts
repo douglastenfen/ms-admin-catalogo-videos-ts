@@ -35,8 +35,8 @@ export class RabbitmqConsumeErrorFilter implements ExceptionFilter {
       return new Nack(false);
     }
 
-    const ctx = host.switchToRpc().getContext();
-    const message: ConsumeMessage = ctx.getMessage();
+    const ctx = host.switchToRpc();
+    const message: ConsumeMessage = ctx.getContext();
 
     if (this.shouldRetry(message.properties.headers!)) {
       await this.retry(message);
