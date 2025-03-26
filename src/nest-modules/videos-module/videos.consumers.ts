@@ -10,9 +10,9 @@ import { RabbitmqConsumeErrorFilter } from '../rabbitmq-module/rabbitmq-consume-
 export class VideosConsumers {
   constructor(private moduleRef: ModuleRef) {}
 
-  @UseFilters(new RabbitmqConsumeErrorFilter())
+  @UseFilters(RabbitmqConsumeErrorFilter)
   @RabbitSubscribe({
-    exchange: 'amq.direct',
+    exchange: 'direct.delayed',
     routingKey: 'video.convert',
     queue: 'micro-videos/admin',
     allowNonJsonMessages: true,
