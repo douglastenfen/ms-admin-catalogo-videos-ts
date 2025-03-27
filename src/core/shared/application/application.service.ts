@@ -19,6 +19,10 @@ export class ApplicationService {
     }
 
     await this.uow.commit();
+
+    for (const aggregateRoot of aggregateRoots) {
+      await this.domainEventMediator.publishIntegrationEvents(aggregateRoot);
+    }
   }
 
   async fail() {

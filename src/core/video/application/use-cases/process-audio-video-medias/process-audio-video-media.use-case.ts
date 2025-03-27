@@ -32,7 +32,7 @@ export class ProcessAudioVideoMediaUseCase
 
       video.trailer =
         input.status === AudioVideoMediaStatus.COMPLETED
-          ? video.trailer.complete(input.encondedLocation)
+          ? video.trailer.complete(input.encodedLocation)
           : video.trailer.fail();
     }
 
@@ -43,7 +43,7 @@ export class ProcessAudioVideoMediaUseCase
 
       video.video =
         input.status === AudioVideoMediaStatus.COMPLETED
-          ? video.video.complete(input.encondedLocation)
+          ? video.video.complete(input.encodedLocation)
           : video.video.fail();
     }
 

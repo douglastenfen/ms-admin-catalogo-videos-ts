@@ -18,3 +18,11 @@ services:
       - /var/lib/mysql
     security_opt:
       - seccomp:unconfined
+
+  rabbitmq:
+    build: ./.docker/rabbitmq
+    ports:
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin

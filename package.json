@@ -21,9 +21,12 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.config.ts",
     "tsc:check": "tsc --noEmit",
-    "test:e2e:watch": "jest --watch --config ./test/jest-e2e.config.ts"
+    "test:e2e:watch": "jest --watch --config ./test/jest-e2e.config.ts",
+    "rabbitmq:consumers:dev": "npm run start:dev -- --entryFile cmd/rabbitmq",
+    "rabbitmq:consumers:prod": "node dist/cmd/rabbitmq"
   },
   "dependencies": {
+    "@golevelup/nestjs-rabbitmq": "^5.7.0",
     "@google-cloud/storage": "^7.15.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.3.0",
@@ -54,6 +57,7 @@
     "@swc/cli": "^0.4.0",
     "@swc/core": "^1.7.39",
     "@swc/jest": "^0.2.36",
+    "@types/amqplib": "^0.10.7",
     "@types/chance": "^1.1.6",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.2",

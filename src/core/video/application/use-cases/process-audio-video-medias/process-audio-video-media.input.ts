@@ -4,12 +4,13 @@ import {
   IsNotEmpty,
   IsString,
   IsUUID,
+  MaxLength,
   validateSync,
 } from 'class-validator';
 
 export type ProcessAudioVideoMediaInputConstructor = {
   videoId: string;
-  encondedLocation: string;
+  encodedLocation: string;
   field: 'trailer' | 'video';
   status: AudioVideoMediaStatus;
 };
@@ -20,8 +21,10 @@ export class ProcessAudioVideoMediaInput {
   @IsNotEmpty()
   videoId: string;
 
+  @MaxLength(255)
+  @IsString()
   @IsNotEmpty()
-  encondedLocation: string;
+  encodedLocation: string;
 
   @IsIn(['trailer', 'video'])
   @IsNotEmpty()
@@ -35,7 +38,7 @@ export class ProcessAudioVideoMediaInput {
     if (!props) return;
 
     this.videoId = props.videoId;
-    this.encondedLocation = props.encondedLocation;
+    this.encodedLocation = props.encodedLocation;
     this.field = props.field;
     this.status = props.status;
   }
