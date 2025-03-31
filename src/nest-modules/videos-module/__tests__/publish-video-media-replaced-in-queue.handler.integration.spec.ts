@@ -27,6 +27,7 @@ import { SharedModule } from 'src/nest-modules/shared-module/shared.module';
 import { UseCaseModule } from 'src/nest-modules/use-case-module/use-case.module';
 import { VideosModule } from '../videos.module';
 import { VIDEOS_PROVIDERS } from '../videos.provider';
+import { AuthModule } from 'src/nest-modules/auth-module/auth.module';
 
 describe('PublishVideoMediaReplacedInQueueHandler Integration Tests', () => {
   let module: TestingModule;
@@ -37,6 +38,7 @@ describe('PublishVideoMediaReplacedInQueueHandler Integration Tests', () => {
         ConfigModule.forRoot(),
         SharedModule,
         DatabaseModule,
+        AuthModule,
         EventModule,
         UseCaseModule,
         RabbitmqModule.forRoot(),

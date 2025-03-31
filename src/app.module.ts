@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+
+import { AuthModule } from './nest-modules/auth-module/auth.module';
 import { CastMembersModule } from './nest-modules/cast-members-module/cast-members.module';
 import { CategoriesModule } from './nest-modules/categories-module/categories.module';
 import { ConfigModule } from './nest-modules/config-module/config.module';
@@ -20,6 +22,7 @@ import { RabbitmqFakeController } from './rabbitmq-fake/rabbitmq-fake.controller
     EventModule,
     UseCaseModule,
     RabbitmqModule.forRoot(),
+    AuthModule,
     CategoriesModule,
     CastMembersModule,
     GenresModule,

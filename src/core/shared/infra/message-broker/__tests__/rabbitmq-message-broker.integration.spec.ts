@@ -56,7 +56,7 @@ describe('RabbitMQMessageBroker Unit Tests', () => {
 
       const message: ConsumeMessage = await new Promise((resolve) => {
         connection.channel.consume('test-queue', (message) => {
-          resolve(message);
+          resolve(message!);
         });
       });
 

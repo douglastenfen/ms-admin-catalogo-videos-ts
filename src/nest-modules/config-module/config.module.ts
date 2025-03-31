@@ -83,6 +83,16 @@ export const CONFIG_RABBITMQ_SCHEMA: Joi.StrictSchemaMap<CONFIG_RABBITMQ_SCHEMA_
     RABBITMQ_REGISTER_HANDLERS: Joi.boolean().required(),
   };
 
+type CONFIG_JWT_SCHEMA_TYPE = {
+  JWT_PRIVATE_KEY: string;
+  JWT_PUBLIC_KEY: string;
+};
+
+export const CONFIG_JWT_SCHEMA: Joi.StrictSchemaMap<CONFIG_JWT_SCHEMA_TYPE> = {
+  JWT_PRIVATE_KEY: Joi.string().optional(),
+  JWT_PUBLIC_KEY: Joi.string().required(),
+};
+
 @Module({})
 export class ConfigModule extends NestConfigModule {
   static forRoot(options: ConfigModuleOptions = {}) {
@@ -99,6 +109,7 @@ export class ConfigModule extends NestConfigModule {
         ...CONFIG_DB_SCHEMA,
         ...CONFIG_GOOGLE_SCHEMA,
         ...CONFIG_RABBITMQ_SCHEMA,
+        ...CONFIG_JWT_SCHEMA,
       }),
       ...otherOptions,
     });
