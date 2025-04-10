@@ -10,6 +10,9 @@ services:
       - '/etc/localtime:/etc/localtime:ro'
     extra_hosts:
       - host.docker.internal:host-gateway
+    labels:
+      filebeat_collector: 'true'
+      decode_log_event_to_json_object: 'true'
 
   db:
     image: mysql:8.0.30-debian

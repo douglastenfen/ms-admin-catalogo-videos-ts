@@ -3,9 +3,16 @@ services:
     build: .
     command: ./.docker/start.sh
     ports:
-      - '3000:3000'
+      - 3000:3000
     volumes:
       - .:/home/node/app
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    labels:
+      filebeat_collector: 'true'
+      decode_log_event_to_json_object: 'true'
 
   db:
     image: mysql:8.0.30-debian
@@ -16,3 +23,11 @@ services:
       - ./.docker/dbdata:/var/lib/mysql:delegated
     security_opt:
       - seccomp:unconfined
+
+  rabbitmq:
+    build: ./.docker/rabbitmq
+    ports:
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
