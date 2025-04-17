@@ -45,6 +45,7 @@ describe('CategoriesController (e2e)', () => {
         async ({ categoryID, sendData, expected }) => {
           return request(appHelper.app.getHttpServer())
             .patch(`/categories/${categoryID}`)
+            .authenticate(appHelper.app)
             .send(sendData)
             .expect(expected.statusCode)
             .expect(expected);
@@ -65,6 +66,7 @@ describe('CategoriesController (e2e)', () => {
       test.each(arrange)('when body is $label', ({ value }) => {
         return request(appHelper.app.getHttpServer())
           .patch(`/categories/${uuid}`)
+          .authenticate(appHelper.app)
           .send(value.sendData)
           .expect(422)
           .expect(value.expected);
@@ -97,6 +99,7 @@ describe('CategoriesController (e2e)', () => {
 
         return request(appHelper.app.getHttpServer())
           .patch(`/categories/${category.categoryID.id}`)
+          .authenticate(appHelper.app)
           .send(value.sendData)
           .expect(422)
           .expect(value.expected);
@@ -125,6 +128,7 @@ describe('CategoriesController (e2e)', () => {
 
           const res = await request(appHelper.app.getHttpServer())
             .patch(`/categories/${category.categoryID.id}`)
+            .authenticate(appHelper.app)
             .send(sendData)
             .expect(200);
 

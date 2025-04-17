@@ -38,6 +38,7 @@ describe('CategoriesController (e2e)', () => {
         ({ categoryID, expected }) => {
           return request(appHelper.app.getHttpServer())
             .get(`/categories/${categoryID}`)
+            .authenticate(appHelper.app)
             .expect(expected.statusCode)
             .expect(expected);
         },
@@ -55,6 +56,7 @@ describe('CategoriesController (e2e)', () => {
 
       const res = await request(appHelper.app.getHttpServer())
         .get(`/categories/${category.categoryID.id}`)
+        .authenticate(appHelper.app)
         .expect(200);
 
       const keysInResponse = GetCategoryFixture.keysInResponse;

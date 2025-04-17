@@ -32,6 +32,7 @@ describe('CategoriesController (e2e)', () => {
 
           return request(appHelper.app.getHttpServer())
             .get(`/categories/?${queryParams}`)
+            .authenticate(appHelper.app)
             .expect(200)
             .expect({
               data: expected.entities.map((e) =>
@@ -69,6 +70,7 @@ describe('CategoriesController (e2e)', () => {
 
           return request(appHelper.app.getHttpServer())
             .get(`/categories/?${queryParams}`)
+            .authenticate(appHelper.app)
             .expect(200)
             .expect({
               data: expected.entities.map((e) =>
