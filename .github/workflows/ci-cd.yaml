@@ -121,4 +121,4 @@ jobs:
 
     steps:
       - name: show version
-        run: echo ${{ needs.ci.outputs.new_version }}"
+        run: echo ${{ needs.ci.outputs.new_version }}
