@@ -85,8 +85,8 @@ jobs:
 
       - name: generate envs
         run: |
-          docker compose -f docker-compose.ci.yaml exec -T app cp envs/.env.test.example envs/.env.test
-          docker compose -f docker-compose.ci.yaml exec -T app cp envs/.env.e2e.example envs/.env.e2e
+          docker compose -f docker-compose.ci.yaml exec -u root -T app cp ./envs/.env.test.example ./envs/.env.test
+          docker compose -f docker-compose.ci.yaml exec -u root -T app cp ./envs/.env.e2e.example ./envs/.env.e2e
 
       - name: run unit and integration tests
         run: docker compose -f docker-compose.ci.yaml exec -T app npm run test
