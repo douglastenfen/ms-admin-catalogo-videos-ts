@@ -1,7 +1,10 @@
 import { CastMemberId } from '@core/cast-member/domain/cast-member.aggregate';
 import { CategoryId } from '@core/category/domain/category.aggregate';
 import { GenreId } from '@core/genre/domain/genre.aggregate';
-import { IDomainEvent } from '@core/shared/domain/events/domain-event.interface';
+import {
+  IDomainEvent,
+  IIntegrationEvent,
+} from '@core/shared/domain/events/domain-event.interface';
 import { Banner } from '../banner.vo';
 import { Rating } from '../rating.vo';
 import { ThumbnailHalf } from '../thumbnail-half.vo';
@@ -72,5 +75,33 @@ export class VideoCreatedEvent implements IDomainEvent {
     this.createdAt = props.createdAt;
     this.occurredOn = new Date();
     this.eventVersion = 1;
+  }
+
+  getIntegrationEvent(): VideoCreatedIntegrationEvent {
+    return new VideoCreatedIntegrationEvent(this);
+  }
+}
+
+export class VideoCreatedIntegrationEvent implements IIntegrationEvent {
+  declare eventName: string;
+  declare payload: any;
+  declare eventVersion: number;
+  declare occurredOn: Date;
+
+  constructor(event: VideoCreatedEvent) {
+    this['videoId'] = event.aggregateId.id;
+    this['title'] = event.title;
+    this['description'] = event.description;
+    this['releasedYear'] = event.releasedYear;
+    this['duration'] = event.duration;
+    this['rating'] = event.rating.value;
+    this['isOpened'] = event.isOpened;
+    this['isPublished'] = event.isPublished;
+    this['categoriesId'] = event.categoriesId.map((c) => c.id);
+    this['genresId'] = event.genresId.map((g) => g.id);
+    this['castMembersId'] = event.castMembersId.map((c) => c.id);
+    this['createdAt'] = event.createdAt;
+    this.eventVersion = event.eventVersion;
+    this.occurredOn = event.occurredOn;
   }
 }

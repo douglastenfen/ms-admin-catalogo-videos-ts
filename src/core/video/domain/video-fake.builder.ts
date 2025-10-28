@@ -263,7 +263,7 @@ export class VideoFakeBuilder<TBuild = any> {
       return video;
     });
 
-    return this.countObjs === 1 ? (videos[0] as any) : videos;
+    return this.countObjs === 1 ? (videos[0] as TBuild) : (videos as TBuild);
   }
 
   get videoId() {

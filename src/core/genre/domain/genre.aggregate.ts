@@ -2,6 +2,9 @@ import { CategoryId } from '@core/category/domain/category.aggregate';
 import { AggregateRoot } from '@core/shared/domain/aggregate-root';
 import { ValueObject } from '@core/shared/domain/value-object';
 import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
+import { GenreCreatedEvent } from './domain-events/genre-created.event';
+import { GenreDeletedEvent } from './domain-events/genre-deleted.event';
+import { GenreUpdatedEvent } from './domain-events/genre-updated.event';
 import { GenreValidatorFactory } from './genre.validator';
 import { GenreFakeBuilder } from './genre-fake.builder';
 
@@ -35,6 +38,9 @@ export class Genre extends AggregateRoot {
     this.categoriesId = props.categoriesId;
     this.isActive = props.isActive ?? true;
     this.createdAt = props.createdAt ?? new Date();
+    this.registerHandler(GenreCreatedEvent.name, this.onGenreCreated.bind(this));
+    this.registerHandler(GenreUpdatedEvent.name, this.onGenreUpdated.bind(this));
+    this.registerHandler(GenreDeletedEvent.name, this.onGenreDeleted.bind(this));
   }
 
   get entityId(): ValueObject {
@@ -51,6 +57,16 @@ export class Genre extends AggregateRoot {
 
     genre.validate(['name']);
 
+    genre.applyEvent(
+      new GenreCreatedEvent({
+        genreId: genre.genreId,
+        name: genre.name,
+        categoriesId: Array.from(genre.categoriesId.values()),
+        isActive: genre.isActive,
+        createdAt: genre.createdAt,
+      }),
+    );
+
     return genre;
   }
 
@@ -58,6 +74,15 @@ export class Genre extends AggregateRoot {
     this.name = name;
 
     this.validate(['name']);
+
+    this.applyEvent(
+      new GenreUpdatedEvent({
+        genreId: this.genreId,
+        name: this.name,
+        categoriesId: Array.from(this.categoriesId.values()),
+        isActive: this.isActive,
+      }),
+    );
   }
 
   addCategoryId(categoryId: CategoryId): void {
@@ -76,14 +101,61 @@ export class Genre extends AggregateRoot {
     this.categoriesId = new Map(
       categoriesId.map((categoryId) => [categoryId.id, categoryId]),
     );
+
+    this.applyEvent(
+      new GenreUpdatedEvent({
+        genreId: this.genreId,
+        name: this.name,
+        categoriesId: Array.from(this.categoriesId.values()),
+        isActive: this.isActive,
+      }),
+    );
   }
 
   activate(): void {
     this.isActive = true;
+
+    this.applyEvent(
+      new GenreUpdatedEvent({
+        genreId: this.genreId,
+        name: this.name,
+        categoriesId: Array.from(this.categoriesId.values()),
+        isActive: this.isActive,
+      }),
+    );
   }
 
   deactivate(): void {
     this.isActive = false;
+
+    this.applyEvent(
+      new GenreUpdatedEvent({
+        genreId: this.genreId,
+        name: this.name,
+        categoriesId: Array.from(this.categoriesId.values()),
+        isActive: this.isActive,
+      }),
+    );
+  }
+
+  markAsDeleted(): void {
+    this.applyEvent(
+      new GenreDeletedEvent({
+        genreId: this.genreId,
+      }),
+    );
+  }
+
+  private onGenreCreated(event: GenreCreatedEvent): void {
+    // TODO: Handler para o evento de criação, se necessário
+  }
+
+  private onGenreUpdated(event: GenreUpdatedEvent): void {
+    // TODO: Handler para o evento de atualização, se necessário
+  }
+
+  private onGenreDeleted(event: GenreDeletedEvent): void {
+    // TODO: Handler para o evento de deleção, se necessário
   }
 
   validate(fields?: string[]) {

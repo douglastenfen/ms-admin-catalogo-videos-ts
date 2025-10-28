@@ -9,7 +9,9 @@ import { IStorage } from '@core/shared/application/sotarge.interface';
 import { IUnitOfWork } from '@core/shared/domain/repository/unit-of-work.interface';
 import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
 import { CreateVideoUseCase } from '@core/video/application/use-cases/create-video/create-video.use-case';
+import { DeleteVideoUseCase } from '@core/video/application/use-cases/delete-video/delete-video.use-case';
 import { GetVideoUseCase } from '@core/video/application/use-cases/get-video/get-video.use-case';
+import { ListVideosUseCase } from '@core/video/application/use-cases/list-videos/list-videos.use-case';
 import { ProcessAudioVideoMediaUseCase } from '@core/video/application/use-cases/process-audio-video-medias/process-audio-video-media.use-case';
 import { UpdateVideoUseCase } from '@core/video/application/use-cases/update-video/update-video.use-case';
 import { UploadAudioVideoMediaUseCase } from '@core/video/application/use-cases/upload-audio-video-medias/upload-audio-video-media.use-case';
@@ -22,6 +24,8 @@ import { CAST_MEMBER_PROVIDERS } from '../cast-members-module/cast-members.provi
 import { CATEGORY_PROVIDERS } from '../categories-module/categories.provider';
 import { GENRES_PROVIDERS } from '../genres-module/genres.provider';
 import { PublishVideoMediaReplacedInQueueHandler } from '@core/video/application/handlers/publish-video-media-replaced-in-queue.handler';
+import { PublishVideoCreatedInQueueHandler } from '@core/video/application/handlers/publish-video-created-in-queue.handler';
+import { PublishVideoDeletedInQueueHandler } from '@core/video/application/handlers/publish-video-deleted-in-queue.handler';
 import { IMessageBroker } from '@core/shared/application/message-broker.interface';
 
 export const REPOSITORIES = {
@@ -147,6 +151,35 @@ export const USE_CASES = {
     },
     inject: ['UnitOfWork', REPOSITORIES.VIDEO_REPOSITORY.provide],
   },
+  LIST_VIDEOS_USE_CASE: {
+    provide: ListVideosUseCase,
+    useFactory: (
+      videoRepository: IVideoRepository,
+      categoryRepository: ICategoryRepository,
+      genreRepository: IGenreRepository,
+      castMemberRepository: ICastMemberRepository,
+    ) => {
+      return new ListVideosUseCase(
+        videoRepository,
+        categoryRepository,
+        genreRepository,
+        castMemberRepository,
+      );
+    },
+    inject: [
+      REPOSITORIES.VIDEO_REPOSITORY.provide,
+      CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
+      GENRES_PROVIDERS.REPOSITORIES.GENRE_REPOSITORY.provide,
+      CAST_MEMBER_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide,
+    ],
+  },
+  DELETE_VIDEO_USE_CASE: {
+    provide: DeleteVideoUseCase,
+    useFactory: (videoRepository: IVideoRepository) => {
+      return new DeleteVideoUseCase(videoRepository);
+    },
+    inject: [REPOSITORIES.VIDEO_REPOSITORY.provide],
+  },
 };
 
 export const HANDLERS = {
@@ -154,6 +187,20 @@ export const HANDLERS = {
     provide: PublishVideoMediaReplacedInQueueHandler,
     useFactory: (messageBroker: IMessageBroker) => {
       return new PublishVideoMediaReplacedInQueueHandler(messageBroker);
+    },
+    inject: ['IMessageBroker'],
+  },
+  PUBLISH_VIDEO_CREATED_IN_QUEUE_HANDLER: {
+    provide: PublishVideoCreatedInQueueHandler,
+    useFactory: (messageBroker: IMessageBroker) => {
+      return new PublishVideoCreatedInQueueHandler(messageBroker);
+    },
+    inject: ['IMessageBroker'],
+  },
+  PUBLISH_VIDEO_DELETED_IN_QUEUE_HANDLER: {
+    provide: PublishVideoDeletedInQueueHandler,
+    useFactory: (messageBroker: IMessageBroker) => {
+      return new PublishVideoDeletedInQueueHandler(messageBroker);
     },
     inject: ['IMessageBroker'],
   },

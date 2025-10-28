@@ -14,6 +14,10 @@ import { IUnitOfWork } from '@core/shared/domain/repository/unit-of-work.interfa
 import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
 import { getModelToken } from '@nestjs/sequelize';
 import { CATEGORY_PROVIDERS } from '../categories-module/categories.provider';
+import { PublishGenreCreatedInQueueHandler } from '@core/genre/application/handlers/publish-genre-created-in-queue.handler';
+import { PublishGenreUpdatedInQueueHandler } from '@core/genre/application/handlers/publish-genre-updated-in-queue.handler';
+import { PublishGenreDeletedInQueueHandler } from '@core/genre/application/handlers/publish-genre-deleted-in-queue.handler';
+import { IMessageBroker } from '@core/shared/application/message-broker.interface';
 
 export const REPOSITORIES = {
   GENRE_REPOSITORY: {
@@ -125,8 +129,33 @@ export const VALIDATIONS = {
   },
 };
 
+export const HANDLERS = {
+  PUBLISH_GENRE_CREATED_IN_QUEUE_HANDLER: {
+    provide: PublishGenreCreatedInQueueHandler,
+    useFactory: (messageBroker: IMessageBroker) => {
+      return new PublishGenreCreatedInQueueHandler(messageBroker);
+    },
+    inject: ['IMessageBroker'],
+  },
+  PUBLISH_GENRE_UPDATED_IN_QUEUE_HANDLER: {
+    provide: PublishGenreUpdatedInQueueHandler,
+    useFactory: (messageBroker: IMessageBroker) => {
+      return new PublishGenreUpdatedInQueueHandler(messageBroker);
+    },
+    inject: ['IMessageBroker'],
+  },
+  PUBLISH_GENRE_DELETED_IN_QUEUE_HANDLER: {
+    provide: PublishGenreDeletedInQueueHandler,
+    useFactory: (messageBroker: IMessageBroker) => {
+      return new PublishGenreDeletedInQueueHandler(messageBroker);
+    },
+    inject: ['IMessageBroker'],
+  },
+};
+
 export const GENRES_PROVIDERS = {
   REPOSITORIES,
   USE_CASES,
   VALIDATIONS,
+  HANDLERS,
 };

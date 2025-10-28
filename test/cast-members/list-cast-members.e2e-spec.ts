@@ -33,6 +33,7 @@ describe('CastMembersController (e2e)', () => {
 
           return request(nestApp.app.getHttpServer())
             .get(`/cast-members?${queryParams}`)
+            .authenticate(nestApp.app)
             .expect(200)
             .expect({
               data: expected.entities.map((entity) =>
@@ -71,6 +72,7 @@ describe('CastMembersController (e2e)', () => {
           return request(nestApp.app.getHttpServer())
             .get(`/cast-members/?${queryParams}`)
             .expect(200)
+            .authenticate(nestApp.app)
             .expect({
               data: expected.entities.map((entity) =>
                 instanceToPlain(

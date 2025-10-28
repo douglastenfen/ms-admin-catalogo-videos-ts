@@ -21,6 +21,7 @@ import {
   ListCastMembersFixture,
   UpdateCastMemberFixture,
 } from '../testing/cast-member-fixture';
+import { AuthModule } from 'src/nest-modules/auth-module/auth.module';
 
 describe('CastMembersController Integration Tests', () => {
   let controller: CastMembersController;
@@ -28,7 +29,12 @@ describe('CastMembersController Integration Tests', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot(), DatabaseModule, CastMembersModule],
+      imports: [
+        ConfigModule.forRoot(),
+        DatabaseModule,
+        AuthModule,
+        CastMembersModule,
+      ],
     }).compile();
 
     controller = module.get(CastMembersController);

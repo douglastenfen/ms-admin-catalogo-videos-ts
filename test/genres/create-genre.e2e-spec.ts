@@ -12,6 +12,24 @@ import request from 'supertest';
 
 describe('GenresController (e2e)', () => {
   describe('/genres (POST)', () => {
+    describe('unaunthenticated', () => {
+      const app = startApp();
+
+      test('return 401 when not authenticated', () => {
+        return request(app.app.getHttpServer())
+          .post('/genres')
+          .send({})
+          .expect(401);
+      });
+
+      test('return 403 when not authenticated as admin', () => {
+        return request(app.app.getHttpServer())
+          .post('/genres')
+          .authenticate(app.app, false)
+          .send({})
+          .expect(403);
+      });
+    });
     describe('should a response error with 422 when request body is invalid', () => {
       const app = startApp();
 
@@ -25,6 +43,7 @@ describe('GenresController (e2e)', () => {
       test.each(arrange)('when body is $label', ({ value }) => {
         return request(app.app.getHttpServer())
           .post('/genres')
+          .authenticate(app.app)
           .send(value.sendData)
           .expect(422)
           .expect(value.expected);
@@ -45,6 +64,7 @@ describe('GenresController (e2e)', () => {
       test.each(arrange)('when body is $label', ({ value }) => {
         return request(app.app.getHttpServer())
           .post('/genres')
+          .authenticate(app.app)
           .send(value.sendData)
           .expect(422)
           .expect(value.expected);
@@ -76,6 +96,7 @@ describe('GenresController (e2e)', () => {
 
           const res = await request(app.app.getHttpServer())
             .post('/genres')
+            .authenticate(app.app)
             .send(sendData)
             .expect(201);
 

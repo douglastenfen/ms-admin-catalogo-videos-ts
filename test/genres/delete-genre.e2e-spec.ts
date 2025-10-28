@@ -36,6 +36,7 @@ describe('GenresController (e2e)', () => {
         async ({ genreId, expected }) => {
           return request(nestApp.app.getHttpServer())
             .delete(`/genres/${genreId}`)
+            .authenticate(nestApp.app)
             .expect(expected.statusCode)
             .expect(expected);
         },
@@ -63,6 +64,7 @@ describe('GenresController (e2e)', () => {
 
       await request(nestApp.app.getHttpServer())
         .delete(`/genres/${genre.genreId.id}`)
+        .authenticate(nestApp.app)
         .expect(204);
 
       await expect(genreRepo.findByID(genre.genreId)).resolves.toBeNull();
