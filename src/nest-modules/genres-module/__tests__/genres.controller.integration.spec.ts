@@ -48,6 +48,10 @@ describe('GenresController Integration Tests', () => {
         },
         inject: [getConnectionToken()],
       })
+      .overrideProvider('IMessageBroker')
+      .useValue({
+        publishEvent: jest.fn(),
+      })
       .compile();
     controller = module.get(GenresController);
     genreRepository = module.get(

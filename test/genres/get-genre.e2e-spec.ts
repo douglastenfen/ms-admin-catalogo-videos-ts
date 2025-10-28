@@ -41,6 +41,7 @@ describe('GenresController (e2e)', () => {
         async ({ genreId, expected }) => {
           return request(nestApp.app.getHttpServer())
             .get(`/genres/${genreId}`)
+            .authenticate(nestApp.app)
             .expect(expected.statusCode)
             .expect(expected);
         },
@@ -70,6 +71,7 @@ describe('GenresController (e2e)', () => {
 
       const res = await request(nestApp.app.getHttpServer())
         .get(`/genres/${genre.genreId.id}`)
+        .authenticate(nestApp.app)
         .expect(200);
 
       const keyInResponse = GetGenreFixture.keysInResponse;

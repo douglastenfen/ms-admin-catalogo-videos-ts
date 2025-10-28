@@ -34,6 +34,7 @@ describe('CastMembersController (e2e)', () => {
         async ({ castMemberId, expected }) => {
           return request(nestApp.app.getHttpServer())
             .delete(`/cast-members/${castMemberId}`)
+            .authenticate(nestApp.app)
             .expect(expected.statusCode)
             .expect(expected);
         },
@@ -50,6 +51,7 @@ describe('CastMembersController (e2e)', () => {
 
       await request(nestApp.app.getHttpServer())
         .delete(`/cast-members/${castMember.castMemberId.id}`)
+        .authenticate(nestApp.app)
         .expect(204);
 
       await expect(

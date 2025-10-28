@@ -55,7 +55,6 @@ export class CategoriesController {
 
   @Get()
   async search(@Query() searchParamsDto: SearchCategoriesDto) {
-    console.log('[CategoriesController:search] searchParamsDto');
     const output = await this.listCategoriesUseCase.execute(searchParamsDto);
 
     return new CategoryCollectionPresenter(output);
